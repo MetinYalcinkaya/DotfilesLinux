@@ -4,19 +4,21 @@
     // "width": 1280, // Waybar width
     // Choose the order of the modules
     "modules-left": ["hyprland/workspaces"],
-    "modules-center": ["custom/music"],
+    "modules-center": ["group/music"],
+    // "modules-center": ["custom/music", "cava"],
     "modules-right": ["pulseaudio", "clock", "tray", "custom/lock", "custom/power"],
     "hyprland/workspaces": {
          "disable-scroll": true,
          "sort-by-name": true,
          "format": " {icon} ",
          "format-icons": {
-             "default": "",
+             "default": "",
+
          },
      },
     "tray": {
-        "icon-size": 21,
-        "spacing": 10
+        "icon-size": 22,
+        "spacing": 8,
     },
     "custom/music": {
         "format": "  {}",
@@ -29,16 +31,16 @@
     },
     "clock": {
         "timezone": "Australia/Sydney",
-        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
-        "format-alt": " {:%d/%m/%Y}",
-        "format": " {:%H:%M}"
+        "tooltip": false,
+        "format-alt": " {:%d/%m/%Y}",
+        "format": " {:%H:%M}"
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
-        "format": "{icon} {volume}%",
-        "format-muted": "",
+        "format": "{icon}{volume}%",
+        "format-muted": "",
         "format-icons": {
-            "default": ["", "", " "]
+            "default": [" ", " ", " "]
         },
         "on-click": "pavucontrol"
     },
@@ -50,6 +52,31 @@
     "custom/power": {
         "tooltip": false,
         "on-click": "wlogout &",
-        "format": "襤"
-    }
+        // "format": "󰐥"
+        "format": ""
+    },
+    "cava": {
+        "cava_config": "/home/metin/.config/cava/config",
+        "framerate": 144,
+        "bars": 8,
+        "bar_delimiter": 0,
+        "input_delay": 0, // change if cava starts before pipewire
+        "format-icons": [
+            "▁",
+            "▂",
+            "▃",
+            "▄",
+            "▅",
+            "▆",
+            "▇",
+            "█"
+        ],
+    },
+    "group/music": {
+      "orientation": "horizontal",
+      "modules": [
+        "custom/music",
+        "cava"
+      ],
+    },
 }

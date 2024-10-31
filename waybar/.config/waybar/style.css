@@ -1,8 +1,8 @@
 @import "mocha.css";
 
 * {
-  font-family: FantasqueSansMono Nerd Font;
-  font-size: 17px;
+  font-family: MonoLisa, "Symbols Nerd Font";
+  font-size: 18px;
   min-height: 0;
 }
 
@@ -36,6 +36,7 @@
 }
 
 #custom-music,
+#cava,
 #tray,
 #backlight,
 #clock,
@@ -82,7 +83,14 @@
 
 #custom-music {
   color: @mauve;
-  border-radius: 1rem;
+  border-radius: 1rem 0px 0px 1rem;
+  margin-left: 1rem;
+}
+
+#cava {
+  color: @mauve;
+  border-radius: 0px 1rem 1rem 0px;
+  margin-right: 1rem;
 }
 
 #custom-lock {
@@ -91,12 +99,17 @@
 }
 
 #custom-power {
-    margin-right: 1rem;
-    border-radius: 0px 1rem 1rem 0px;
-    color: @red;
+  color: @red;
+  margin-right: 1rem;
+  border-radius: 0px 1rem 1rem 0px;
 }
 
 #tray {
   margin-right: 1rem;
   border-radius: 1rem;
+}
+
+#tray menu {
+  color: @mauve;
+  background-color: @surface0;
 }
