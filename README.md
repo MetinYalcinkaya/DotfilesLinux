@@ -4,7 +4,7 @@
 
 ## Setup
 
-**OS:** MacOS
+**OS:** Arch Linux (btw)
 
 **Shell:** zsh + powerlevel10k
 
@@ -19,11 +19,14 @@
   - Ripgrep for telescope.nvim
 - Nerd font
 - Terminal that supports true colors
-  - oh-my-zsh for the theme
 
 ## Installation
 
-1. Install `homebrew`
-2. Install GNU Stow `brew install stow`
-3. Clone this repository (Preferably to ~/.dotfiles/)
-4. Run `make` in your terminal from the ~/.dotfiles/ directory
+1. Install GNU Stow `sudo pacman -S stow`
+2. Clone this repository (Preferably to ~/.dotfiles/)
+   - Clone with `git clone --recurse-submodules git@github.com:MetinYalcinkaya/DotfilesLinux.git ~/.dotfiles`
+3. Run `make` in your terminal from the ~/.dotfiles/ directory
+
+## TODO
+
+- New screenshot
