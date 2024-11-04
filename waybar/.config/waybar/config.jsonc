@@ -6,7 +6,7 @@
     "modules-left": ["hyprland/workspaces"],
     "modules-center": ["group/music"],
     // "modules-center": ["custom/music", "cava"],
-    "modules-right": ["pulseaudio", "clock", "tray", "custom/lock", "custom/power"],
+    "modules-right": ["pulseaudio", "clock", "tray", "custom/lock", "custom/power"], // tray gives error
     "hyprland/workspaces": {
          "disable-scroll": true,
          "sort-by-name": true,
@@ -25,15 +25,15 @@
         "escape": true,
         "interval": 5,
         "tooltip": false,
-        "exec": "playerctl metadata --format='{{ title }} - {{ artist }}'",
-        "on-click": "playerctl play-pause",
+        "exec": "playerctl -p spotify metadata --format='{{ title }} - {{ artist }}'",
+        "on-click": "playerctl -p spotify play-pause",
         "max-length": 50
     },
     "clock": {
         "timezone": "Australia/Sydney",
         "tooltip": false,
         "format-alt": " {:%d/%m/%Y}",
-        "format": " {:%H:%M}"
+        "format": " {:%I:%M %p}"
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float

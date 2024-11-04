@@ -83,8 +83,9 @@ fi
 #######
 # Eza #
 #######
-alias ls="eza --color=always --group-directories-first --no-filesize --no-time --no-permissions --no-user"
-alias lst="eza --color=always --group-directories-first --tree --level=2"
+alias ls="eza -l --color=always --group-directories-first"
+alias lsa="eza --color=always --group-directories-first --no-filesize --no-time --no-permissions --no-user"
+alias lst="eza --color=always --group-directories-first --tree --level=3"
 
 #######
 # Bat #
