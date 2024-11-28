@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-VAULT_DIR="/Users/metinyalcinkaya/Documents/Obsidian/Main"
+VAULT_DIR="/home/metin/Documents/Obsidian/Main"
 SOURCE_DIR="uncategorized"
 DEST_DIR="notes"
 

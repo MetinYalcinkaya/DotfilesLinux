@@ -1,5 +1,6 @@
 # Theme
-theme = catppuccin-mocha
+# theme = catppuccin-mocha
+theme = rose-pine
 
 # Font
 font-family = "MonoLisa"
@@ -12,15 +13,42 @@ font-style-bold-italic = "Bold Italic"
 font-size = 14
 font-synthetic-style = false
 
+# Opentype Font Features
+# List of MonoLisa features
+# Prefix with - (Minus) to disable
+##################################
+# calt = Whitespace ligatures
+# liga = Coding ligatures
+# ss03 = Alt G
+# ss04 = Alt G 2
+# zero = Slashed zero
+# ss01 = Normal asterisk
+# ss02 = Script variant
+# ss05 = Alt sharp S
+# ss06 = Alt AT (@)
+# ss18 = Alt AT (@) 2
+# ss07 = Alt curly brackets {}
+# ss08 = Alt parenthesis
+# ss09 = Alt greater/equal
+# ss10 = Alt greater/equal 2
+# ss11 = Hexadecimal X
+# ss12 = Thin backslash
+# ss13 = Alt dollar
+# ss14 = Alt &
+# ss15 = I without serif
+# ss16 = R without serif
+# ss17 = Alt ..= and .=
+##################################
+
 font-feature = ss01
 font-feature = ss02
 font-feature = ss07
 font-feature = ss08
-font-feature = ss12
 font-feature = ss13
 font-feature = ss14
 font-feature = ss17
 
+# For variable font
 # font-variation = wght=600
 # font-variation-bold = wght=800
 # font-variation-italic = wght=600
