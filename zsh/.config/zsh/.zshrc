@@ -85,7 +85,6 @@ sources+="$ZDOTDIR/aliases/aliases" # Aliases
 # Plugins
 sources+="$ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" # Syntax highlighting
 sources+="$ZDOTDIR/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" # Autosuggestions
-sources+="$ZDOTDIR/plugins/zsh-catppuccin/catppuccin_mocha-zsh-syntax-highlighting.zsh"
 # Prompt
 sources+="$ZDOTDIR/themes/powerlevel10k/powerlevel10k.zsh-theme"
 

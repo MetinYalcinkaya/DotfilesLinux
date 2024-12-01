@@ -2,6 +2,9 @@
 # theme = catppuccin-mocha
 theme = rose-pine
 
+# Initial command
+command = tmux attach-session || tmux
+
 # Font
 font-family = "MonoLisa"
 
