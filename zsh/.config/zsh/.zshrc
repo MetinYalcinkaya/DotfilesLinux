@@ -114,3 +114,6 @@ autoload -Uz compinit && compinit
 # export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 
 export PATH=$PATH:/home/metin/.spicetify
+
+# bun completions
+[ -s "/home/metin/.bun/_bun" ] && source "/home/metin/.bun/_bun"
