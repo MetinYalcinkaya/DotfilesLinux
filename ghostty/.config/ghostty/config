@@ -1,6 +1,6 @@
 # Theme
 # theme = catppuccin-mocha
-theme = rose-pine
+theme = tokyonight
 
 # Initial command
 command = tmux attach-session || tmux

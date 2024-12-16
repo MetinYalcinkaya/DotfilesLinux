@@ -41,7 +41,7 @@ export CLICOLOR=1
 # export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
 
 # Bat colorscheme
-export BAT_THEME="Catppuccin-Mocha"
+# export BAT_THEME="Catppuccin-Mocha"
 
 ############
 # Ruby Env #
@@ -117,3 +117,6 @@ export PATH=$PATH:/home/metin/.spicetify
 
 # bun completions
 [ -s "/home/metin/.bun/_bun" ] && source "/home/metin/.bun/_bun"
+
+# Created by `pipx` on 2024-12-13 07:43:17
+export PATH="$PATH:/home/metin/.local/bin"
