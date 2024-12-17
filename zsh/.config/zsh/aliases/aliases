@@ -8,7 +8,7 @@ alias dev="cd $HOME/Developer/"
 # Obsidian review
 alias or="nvim $HOME/Documents/Obsidian/Main/inbox/*.md"
 
-alias envact="source $(poetry env info --path)/bin/activate"
+# alias envact="source $(poetry env info --path)/bin/activate"
 
 #######
 # ZSH #
