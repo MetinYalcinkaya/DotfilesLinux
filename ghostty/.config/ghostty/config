@@ -3,7 +3,7 @@
 theme = tokyonight
 
 # Initial command
-command = tmux attach-session || tmux
+# command = tmux attach-session || tmux
 
 # Font
 font-family = "MonoLisa"
