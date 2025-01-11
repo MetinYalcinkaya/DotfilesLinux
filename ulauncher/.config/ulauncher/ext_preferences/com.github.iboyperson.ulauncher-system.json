@@ -1,0 +1,10 @@
+{
+    "preferences": {
+        "triggers": {
+            "system_ext": {
+                "keyword": "sys"
+            }
+        }
+    },
+    "triggers": {}
+}

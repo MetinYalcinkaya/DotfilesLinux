@@ -1,6 +1,6 @@
 # Theme
 # theme = catppuccin-mocha
-theme = tokyonight
+theme = tokyonight_moon
 
 # Initial command
 # command = tmux attach-session || tmux
@@ -13,7 +13,7 @@ font-style-italic = "Regular Italic"
 font-style-bold = "Bold"
 font-style-bold-italic = "Bold Italic"
 
-font-size = 14
+font-size = 15
 font-synthetic-style = false
 
 # Opentype Font Features
@@ -69,22 +69,22 @@ font-codepoint-map = U+E0A0-U+E0A3,U+E0C0-U+E0C7,U+E0B0-U+E0B3=
 
 
 # Cursor
-cursor-style = block 
+cursor-style = block
 cursor-style-blink = false
 mouse-hide-while-typing = true
 
 # Window
 window-decoration = false
 window-vsync = true
-window-padding-y = 5,2
-window-padding-x = 5
+window-padding-y = 0
+window-padding-x = 0
 window-padding-balance = true
 confirm-close-surface = false
-background-opacity = 0.95
+background-opacity = 1
 
 # Misc
 scrollback-limit = 10000000
-auto-update = check
+# auto-update = check
 custom-shader-animation = false
 shell-integration-features = no-cursor,no-sudo,title
 
