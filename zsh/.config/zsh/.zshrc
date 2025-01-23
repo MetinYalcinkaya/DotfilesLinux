@@ -88,6 +88,9 @@ export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS \
 ###########
 # Keymaps #
 ###########
+# vi mode
+bindkey -v
+# tmux sessionizer keybind (ctrl+f)
 bindkey -s ^f "tmux-sessionizer\n"
 # Use fd instead of fzf
 export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
@@ -103,6 +106,7 @@ sources+="$ZDOTDIR/scripts/uvsh"
 # Plugins
 sources+="$ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" # Syntax highlighting
 sources+="$ZDOTDIR/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" # Autosuggestions
+sources+="$ZDOTDIR/plugins/zsh-vi-mode/zsh-vi-mode.plugin.zsh" # Vi mode
 # Prompt
 sources+="$ZDOTDIR/themes/powerlevel10k/powerlevel10k.zsh-theme"
 
