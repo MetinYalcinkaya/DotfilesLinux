@@ -34,7 +34,6 @@ export VISUAL="nvim"
 export MANPAGER="nvim +Man!"
 export HYPRSHOT_DIR=~/Pictures/
 export TERM=ghostty
-
 export CLICOLOR=1
 
 # export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
