@@ -6,7 +6,7 @@
   "daemonless": true,
   "disable_desktop_filters": true,
   "enable_application_mode": true,
-  "grab_mouse_pointer": true,
+  "grab_mouse_pointer": false,
   "jump_keys": "1234567890abcdefghijklmnopqrstuvwxyz",
   "max_recent_apps": 0,
   "raise_if_started": false,
