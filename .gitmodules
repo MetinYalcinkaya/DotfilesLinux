@@ -1,12 +1,16 @@
 [submodule "zsh/.config/zsh/plugins/zsh-autosuggestions"]
 	path = zsh/.config/zsh/plugins/zsh-autosuggestions
 	url = git@github.com:zsh-users/zsh-autosuggestions.git
+  update = merge
 [submodule "zsh/.config/zsh/plugins/zsh-syntax-highlighting"]
 	path = zsh/.config/zsh/plugins/zsh-syntax-highlighting
 	url = git@github.com:zsh-users/zsh-syntax-highlighting.git
+  update = merge
 [submodule "zsh/.config/zsh/themes/powerlevel10k"]
 	path = zsh/.config/zsh/themes/powerlevel10k
 	url = git@github.com:romkatv/powerlevel10k.git
+  update = merge
 [submodule "nvim/.config/nvim"]
 	path = nvim/.config/nvim
 	url = git@github.com:MetinYalcinkaya/nvim.git
+  update = merge
