@@ -1,7 +1,4 @@
 [manager]
-# NOTE: can combined with tmTheme (sublime colorshceme file) for preview code highlight
-# syntect_theme = "path/to/tmTheme"
-
 cwd = { fg = "#828bb8", italic = true }
 
 # Hovered
@@ -43,9 +40,9 @@ unset_main  = { fg = "#1b1d2b", bg = "#fca7ea", bold = true }
 unset_alt   = { fg = "#fca7ea", bg = "#3b4261" }
 
 [status]
-separator_open    = ""
-separator_close   = ""
-# separator_style = { fg = "#3b4261", bg = "#3b4261" }
+sep_left = {open = "", close = ""}
+sep_right = {open = "", close = ""}
+separator_style = { fg = "#3b4261", bg = "#3b4261" }
 
 # Progress
 progress_label  = { fg = "#828bb8", bold = true }

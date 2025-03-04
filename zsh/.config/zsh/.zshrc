@@ -13,8 +13,6 @@ setopt PUSHD_SILENT
 ###########
 
 HIST_STAMPS="yyyy/mm/dd"
-setopt EXTENDED_HISTORY
-setopt SHARE_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST
 setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_ALL_DUPS
@@ -23,8 +21,11 @@ setopt HIST_IGNORE_SPACE
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_VERIFY
 export HISTSIZE=10000
-export SAVEHIST=10000
+HISTDUP=erase
+export SAVEHIST=$HISTSIZE
 export SHELL_SESSIONS_DISABLE=1
+setopt appendhistory
+setopt sharehistory
 
 ###############
 # Environment #
@@ -54,13 +55,22 @@ export CLICOLOR=1
 # Keymaps #
 ###########
 # vi mode
-bindkey -v
+bindkey -e
 # tmux sessionizer keybind (ctrl+f)
 bindkey -s ^f "tmux-sessionizer\n"
 # Use fd instead of fzf
 export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
+# emacs history search
+bindkey '^p' history-search-backward
+bindkey '^n' history-search-forward
+
+##########
+# ZStyle #
+##########
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
 ############
 # Sourcing #
@@ -71,6 +81,7 @@ sources+="$ZDOTDIR/scripts/uvsh"
 # Plugins
 sources+="$ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" # Syntax highlighting
 sources+="$ZDOTDIR/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" # Autosuggestions
+sources+="$ZDOTDIR/plugins/zsh-completions/zsh-completions.plugin.zsh"
 # Prompt
 sources+="$ZDOTDIR/themes/powerlevel10k/powerlevel10k.zsh-theme"
 
