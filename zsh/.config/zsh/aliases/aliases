@@ -5,6 +5,7 @@ alias dots="cd $DOTFILES"
 alias dotsn="cd $DOTFILES/nvim/.config/nvim"
 alias vault="cd $HOME/Documents/Obsidian/Main/"
 alias dev="cd $HOME/Developer/"
+alias uni="cd $HOME/Uni/"
 # Obsidian review
 alias or="nvim $HOME/Documents/Obsidian/Main/inbox/*.md"
 
