@@ -6,7 +6,8 @@
     "modules-left": ["hyprland/workspaces"],
     "modules-center": ["group/music"],
     // "modules-center": ["custom/music", "cava"],
-    "modules-right": ["pulseaudio", "clock", "tray", "custom/lock", "custom/power"], // tray gives error
+    // "modules-right": ["pulseaudio", "clock", "tray", "custom/lock", "custom/power"], // tray gives error
+    "modules-right": ["pulseaudio", "clock", "tray"], // tray gives error
     "hyprland/workspaces": {
          "disable-scroll": true,
          "sort-by-name": true,

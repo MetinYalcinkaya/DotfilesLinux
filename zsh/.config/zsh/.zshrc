@@ -37,20 +37,6 @@ export HYPRSHOT_DIR=~/Pictures/
 export TERM=ghostty
 export CLICOLOR=1
 
-# export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
-# export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
-
-# Bat colorscheme
-# export BAT_THEME="Catppuccin-Mocha"
-
-############
-# Ruby Env #
-############
-# if [ -d "/opt/homebrew/opt/ruby/bin/" ]; then
-#   export PATH=/opt/homebrew/opt/ruby/bin:$PATH
-#   export PATH='gem environment gemdir'/bin:$PATH
-# fi
-
 ###########
 # Keymaps #
 ###########
