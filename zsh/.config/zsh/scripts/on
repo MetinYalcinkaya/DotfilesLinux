@@ -9,7 +9,8 @@ fi
 # prepare the file name w/ date suffix and title
 title="$1"
 file_name=$(echo "$title" | sed 's/[ \/]/-/g') # better title sanitisation
-formatted_file_name=${file_name}_$(date "+%Y-%m-%d").md
+id=${file_name}_$(date "+%Y-%m-%d")
+formatted_file_name=${id}.md
 # paths for vault, template, and destination file
 vault_dir="/home/metin/Documents/Obsidian/Main"
 template_file="$vault_dir/templates/note.md"
@@ -20,6 +21,6 @@ date_str=$(date "+%Y-%m-%d")
 
 # replace placeholders in template file w/ actual ttle and date
 # using a different delim '|' to avoid issues w/ any '/' in title
-sed -e "s|{{title}}|$title|g" -e "s|{{date}}|$date_str|g" "$template_file" > "$destination"
+sed -e "s|{{title}}|$title|g" -e "s|{{date}}|$date_str|g" -e "s|{{id}}|$id|g" "$template_file" > "$destination"
 
 nvim "$destination"

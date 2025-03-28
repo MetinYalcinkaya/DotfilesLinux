@@ -1,0 +1,4 @@
+#!/bin/zsh
+
+killall gjs
+ags run & disown

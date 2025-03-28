@@ -1,9 +1,9 @@
-// https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-3-24/gtk/theme/Adwaita/_colors-public.scss
+// https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-4-16/gtk/theme/Default/_colors-public.scss
 @use "sass:color";
 
-$bg: #212223;
-$fg: #f1f1f1;
-$accent: #378DF7;
+$bg: #282c34;
+$fg: #abb2bf;
+$accent: #61afef;
 $radius: 7px;
 
 window.Bar {
@@ -11,7 +11,8 @@ window.Bar {
     box-shadow: none;
     background-color: $bg;
     color: $fg;
-    font-size: 1.1em;
+    font-family: MonoLisa;
+    font-size: 1.3em;
     font-weight: bold;
 
     label {
@@ -48,10 +49,12 @@ window.Bar {
     }
 
     .SysTray {
+        background-color: red;
         margin-right: 8px;
 
         button {
             padding: 0 4px;
+            background-color: $bg;
         }
     }
 
@@ -65,43 +68,5 @@ window.Bar {
         border-radius: $radius;
         background-position: center;
         background-size: contain;
-    }
-
-    .Battery label {
-        padding-left: 0;
-        margin-left: 0;
-    }
-
-    .AudioSlider {
-        * {
-            all: unset;
-        }
-
-        icon {
-            margin-right: .6em;
-        }
-
-        & {
-            margin: 0 1em;
-        }
-
-        trough {
-            background-color: color.adjust($fg, $alpha: -0.8);
-            border-radius: $radius;
-        }
-
-        highlight {
-            background-color: $accent;
-            min-height: .8em;
-            border-radius: $radius;
-        }
-
-        slider {
-            background-color: $fg;
-            border-radius: $radius;
-            min-height: 1em;
-            min-width: 1em;
-            margin: -.2em;
-        }
     }
 }

@@ -3,9 +3,7 @@ import { Variable, GLib, bind } from "astal"
 import { Astal, Gtk, Gdk } from "astal/gtk3"
 import Hyprland from "gi://AstalHyprland"
 import Mpris from "gi://AstalMpris"
-import Battery from "gi://AstalBattery"
 import Wp from "gi://AstalWp"
-import Network from "gi://AstalNetwork"
 import Tray from "gi://AstalTray"
 
 function SysTray() {
@@ -21,47 +19,6 @@ function SysTray() {
                 <icon gicon={bind(item, "gicon")} />
             </menubutton>
         )))}
-    </box>
-}
-
-function Wifi() {
-    const network = Network.get_default()
-    const wifi = bind(network, "wifi")
-
-    return <box visible={wifi.as(Boolean)}>
-        {wifi.as(wifi => wifi && (
-            <icon
-                tooltipText={bind(wifi, "ssid").as(String)}
-                className="Wifi"
-                icon={bind(wifi, "iconName")}
-            />
-        ))}
-    </box>
-
-}
-
-function AudioSlider() {
-    const speaker = Wp.get_default()?.audio.defaultSpeaker!
-
-    return <box className="AudioSlider" css="min-width: 140px">
-        <icon icon={bind(speaker, "volumeIcon")} />
-        <slider
-            hexpand
-            onDragged={({ value }) => speaker.volume = value}
-            value={bind(speaker, "volume")}
-        />
-    </box>
-}
-
-function BatteryLevel() {
-    const bat = Battery.get_default()
-
-    return <box className="Battery"
-        visible={bind(bat, "isPresent")}>
-        <icon icon={bind(bat, "batteryIconName")} />
-        <label label={bind(bat, "percentage").as(p =>
-            `${Math.floor(p * 100)} %`
-        )} />
     </box>
 }
 
@@ -122,7 +79,7 @@ function FocusedClient() {
     </box>
 }
 
-function Time({ format = "%H:%M - %A %e." }) {
+function Time({ format = "%I:%M %p - %A - %e/%m/%Y" }) {
     const time = Variable<string>("").poll(1000, () =>
         GLib.DateTime.new_now_local().format(format)!)
 
@@ -151,9 +108,6 @@ export default function Bar(monitor: Gdk.Monitor) {
             </box>
             <box hexpand halign={Gtk.Align.END} >
                 <SysTray />
-                <Wifi />
-                <AudioSlider />
-                <BatteryLevel />
                 <Time />
             </box>
         </centerbox>
