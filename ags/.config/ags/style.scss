@@ -1,4 +1,5 @@
 // https://gitlab.gnome.org/GNOME/gtk/-/blob/gtk-4-16/gtk/theme/Default/_colors-public.scss
+// ags inspect -i <instance name, probably ags>
 @use "sass:color";
 
 $bg: #282c34;
@@ -7,66 +8,76 @@ $accent: #61afef;
 $radius: 7px;
 
 window.Bar {
-    border: none;
-    box-shadow: none;
-    background-color: $bg;
-    color: $fg;
-    font-family: MonoLisa;
-    font-size: 1.3em;
-    font-weight: bold;
+  border: none;
+  box-shadow: none;
+  background-color: $bg;
+  color: $fg;
+  font-family: MonoLisa;
+  font-size: 1.3em;
+  font-weight: bold;
+
+  label {
+    margin: 0 8px;
+  }
+
+  .Workspaces  {
+    button {
+      all: unset;
+      background-color: transparent;
+
+      &:hover label {
+        background-color: color.adjust($fg, $alpha: -0.84);
+        border-color: color.adjust($accent, $alpha: -0.8);
+      }
+
+      &:active label {
+        background-color: color.adjust($fg, $alpha: -0.8)
+      }
+    }
 
     label {
-        margin: 0 8px;
+      transition: 200ms;
+      padding: 0 8px;
+      margin: 2px;
+      border-radius: $radius;
+      border: 1pt solid transparent;
     }
 
-    .Workspaces  {
-        button {
-            all: unset;
-            background-color: transparent;
+    .focused label {
+      color: $accent;
+      border-color: $accent;
+    }
+  }
 
-            &:hover label {
-                background-color: color.adjust($fg, $alpha: -0.84);
-                border-color: color.adjust($accent, $alpha: -0.8);
-            }
+  .SysTray {
+    margin-right: 8px;
 
-            &:active label {
-                background-color: color.adjust($fg, $alpha: -0.8)
-            }
-        }
-
-        label {
-            transition: 200ms;
-            padding: 0 8px;
-            margin: 2px;
-            border-radius: $radius;
-            border: 1pt solid transparent;
-        }
-
-        .focused label {
-            color: $accent;
-            border-color: $accent;
-        }
+    button {
+      padding: 0 6px;
+      background-image: none;
+      background-color: $bg;
+      box-shadow: none;
+      border: none;
     }
 
-    .SysTray {
-        background-color: red;
-        margin-right: 8px;
+    menu {
+      background-color: $bg;
 
-        button {
-            padding: 0 4px;
-            background-color: $bg;
-        }
+      label {
+        color: $fg
+      }
     }
+  }
 
-    .FocusedClient {
-        color: $accent;
-    }
+  .FocusedClient {
+    color: $accent;
+  }
 
-    .Media .Cover {
-        min-height: 1.2em;
-        min-width: 1.2em;
-        border-radius: $radius;
-        background-position: center;
-        background-size: contain;
-    }
+  .Media .Cover {
+    min-height: 1.2em;
+    min-width: 1.2em;
+    border-radius: $radius;
+    background-position: center;
+    background-size: contain;
+  }
 }

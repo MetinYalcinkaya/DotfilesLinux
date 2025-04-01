@@ -5,6 +5,7 @@ import Hyprland from "gi://AstalHyprland"
 import Mpris from "gi://AstalMpris"
 import Wp from "gi://AstalWp"
 import Tray from "gi://AstalTray"
+// import Cava from "gi://AstalCava"
 
 function SysTray() {
     const tray = Tray.get_default()
@@ -46,6 +47,62 @@ function Media() {
         ))}
     </box>
 }
+
+// function CavaDraw() {
+//   const cava = Cava.get_default()!;
+//   return (
+//     <box className="Cava">
+//       <drawingarea
+//         hexpand={true}
+//         vexpand={true}
+//         widthRequest={50}
+//         onDraw={(self, cr) => {
+//           const width = self.get_allocated_width();
+//           const height = self.get_allocated_height();
+//           const values = cava.get_values();
+//           const bars = cava.bars;
+//
+//           if (bars === 0 || values.length === 0) return;
+//
+//           // Get color from style context
+//           const color = self
+//             .get_style_context()
+//             .get_color(Gtk.StateFlags.NORMAL);
+//           cr.setSourceRGBA(color.red, color.green, color.blue, color.alpha);
+//
+//           const barWidth = width / (bars - 1);
+//           let lastX = 0;
+//           let lastY = height - height * values[0];
+//
+//           cr.moveTo(lastX, lastY);
+//
+//           for (let i = 1; i < bars; i++) {
+//             const h = height * values[i];
+//             const y = height - h;
+//
+//             cr.curveTo(
+//               lastX + barWidth / 2,
+//               lastY,
+//               lastX + barWidth / 2,
+//               y,
+//               i * barWidth,
+//               y,
+//             );
+//
+//             lastX = i * barWidth;
+//             lastY = y;
+//           }
+//
+//           // Close and fill the path
+//           cr.lineTo(lastX, height);
+//           cr.lineTo(0, height);
+//           cr.closePath();
+//           cr.fill();
+//         }}
+//       />
+//     </box>
+//   ).hook(cava, "notify::values", (self) => self.queue_draw());
+// }
 
 function Workspaces() {
     const hypr = Hyprland.get_default()
@@ -101,7 +158,6 @@ export default function Bar(monitor: Gdk.Monitor) {
         <centerbox>
             <box hexpand halign={Gtk.Align.START}>
                 <Workspaces />
-                <FocusedClient />
             </box>
             <box>
                 <Media />

@@ -8,6 +8,7 @@ theme = onedarkpro_onedark
 # command = tmux attach-session || tmux
 
 # Font
+# font-family = "MonoLisa Variable"
 font-family = "MonoLisa"
 
 font-style = "Regular"
@@ -15,7 +16,7 @@ font-style-italic = "Regular Italic"
 font-style-bold = "Bold"
 font-style-bold-italic = "Bold Italic"
 
-font-size = 15
+font-size = 16
 font-synthetic-style = false
 
 # Opentype Font Features
@@ -45,7 +46,7 @@ font-synthetic-style = false
 # ss17 = Alt ..= and .=
 ##################################
 
-font-feature = -calt
+# font-feature = calt
 font-feature = ss01
 # font-feature = ss02
 font-feature = ss07
