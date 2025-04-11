@@ -6,6 +6,9 @@
 # Env files
 *.env
 
+# Private aliases
+priv_aliases
+
 # Icon must end with two \r
 Icon
 

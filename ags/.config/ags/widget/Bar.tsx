@@ -24,28 +24,30 @@ function SysTray() {
 }
 
 function Media() {
-    const mpris = Mpris.get_default()
+    const spotify = Mpris.Player.new("spotify");
 
     return <box className="Media">
-        {bind(mpris, "players").as(ps => ps[0] ? (
-            <box>
-                <box
-                    className="Cover"
-                    valign={Gtk.Align.CENTER}
-                    css={bind(ps[0], "coverArt").as(cover =>
-                        `background-image: url('${cover}');`
-                    )}
-                />
-                <label
-                    label={bind(ps[0], "metadata").as(() =>
-                        `${ps[0].title} - ${ps[0].artist}`
-                    )}
-                />
-            </box>
-        ) : (
-            <label label="Nothing Playing" />
-        ))}
-    </box>
+        {bind(spotify, "available").as(avail =>
+            avail ? (
+                <box>
+                    <box
+                        className="Cover"
+                        valign={Gtk.Align.CENTER}
+                        css={bind(spotify, "coverArt").as(cover =>
+                            `background-image: url('${cover}');`
+                        )}
+                    />
+                    <label
+                        label={bind(spotify, "title").as(title =>
+                            `${title} - ${spotify.artist}`
+                        )}
+                    />
+                </box>
+            ) : (
+                <label label="Nothing Playing" />
+            )
+        )}
+    </box>;
 }
 
 // function CavaDraw() {
@@ -123,18 +125,18 @@ function Workspaces() {
     </box>
 }
 
-function FocusedClient() {
-    const hypr = Hyprland.get_default()
-    const focused = bind(hypr, "focusedClient")
-
-    return <box
-        className="Focused"
-        visible={focused.as(Boolean)}>
-        {focused.as(client => (
-            client && <label label={bind(client, "title").as(String)} />
-        ))}
-    </box>
-}
+// function FocusedClient() {
+//     const hypr = Hyprland.get_default()
+//     const focused = bind(hypr, "focusedClient")
+//
+//     return <box
+//         className="Focused"
+//         visible={focused.as(Boolean)}>
+//         {focused.as(client => (
+//             client && <label label={bind(client, "title").as(String)} />
+//         ))}
+//     </box>
+// }
 
 function Time({ format = "%I:%M %p - %A - %e/%m/%Y" }) {
     const time = Variable<string>("").poll(1000, () =>
