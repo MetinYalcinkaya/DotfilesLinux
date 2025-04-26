@@ -1,22 +1,21 @@
 # dotfiles
 
-![Fetch](https://github.com/user-attachments/assets/9ae92c41-fb4d-48f5-932c-1b63e9eed118)
+![Fetch](https://github.com/user-attachments/assets/a63e2514-9d2f-457b-bc48-399f8a516d8a)
 
 ## Setup
 
-**OS:** Arch Linux (btw)
+**OS:** Arch Linux
 
-**Shell:** zsh + powerlevel10k
+**Shell:** zsh
 
-**Terminal:** Ghostty + Tmux
+**Terminal:** Ghostty
 
-**Theme:** Catppuccin Mocha
+**Theme:** OneDarkPro
 
 ## Requirements
 
 - GNU Stow
 - Neovim
-  - Ripgrep for telescope.nvim
 - Nerd font
 - Terminal that supports true colors
 
@@ -28,5 +27,3 @@
 3. Run `make` in your terminal from the ~/.dotfiles/ directory
 
 ## TODO
-
-- New screenshot
