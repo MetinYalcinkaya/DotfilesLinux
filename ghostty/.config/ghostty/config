@@ -9,14 +9,15 @@ theme = onedarkpro_onedark
 
 # Font
 # font-family = "MonoLisa Variable"
-font-family = "MonoLisa"
+# font-family = "MonoLisa"
+font-family = "Berkeley Mono"
 
-font-style = "Regular"
-font-style-italic = "Regular Italic"
-font-style-bold = "Bold"
-font-style-bold-italic = "Bold Italic"
+font-style = "Condensed"
+font-style-italic = "Condensed Oblique"
+font-style-bold = "Bold Condensed"
+font-style-bold-italic = "Bold Condensed Oblique"
 
-font-size = 16
+font-size = 18
 font-synthetic-style = false
 
 # Opentype Font Features
@@ -47,13 +48,13 @@ font-synthetic-style = false
 ##################################
 
 # font-feature = calt
-font-feature = ss01
+# font-feature = ss01
 # font-feature = ss02
-font-feature = ss07
-font-feature = ss08
-font-feature = ss13
-font-feature = ss14
-font-feature = ss17
+# font-feature = ss07
+# font-feature = ss08
+# font-feature = ss13
+# font-feature = ss14
+# font-feature = ss17
 
 # For variable font
 # font-variation = wght=600
@@ -78,7 +79,7 @@ cursor-style-blink = false
 mouse-hide-while-typing = true
 
 # Window
-window-decoration = false
+window-decoration = server
 # window-vsync = true
 window-padding-y = 0
 window-padding-x = 0

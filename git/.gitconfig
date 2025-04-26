@@ -5,8 +5,15 @@
 [core]
   editor = nvim
 	excludesfile = ~/.gitignore_global
+  compression = 9
+  whitespace = error
+  preloadindex = true
 [init]
   defaultBranch = main
+[status]
+  branch = true
+  showStash = true
+  showUntrackedFiles = all
 [gpg]
   format = ssh
 [gpg "ssh"]

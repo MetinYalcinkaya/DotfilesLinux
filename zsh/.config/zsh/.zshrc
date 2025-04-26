@@ -8,9 +8,7 @@ setopt AUTO_PUSHD
 setopt PUSHD_IGNORE_DUPS
 setopt PUSHD_SILENT
 
-###########
 # History #
-###########
 
 HIST_STAMPS="yyyy/mm/dd"
 setopt HIST_EXPIRE_DUPS_FIRST
@@ -27,9 +25,7 @@ export SHELL_SESSIONS_DISABLE=1
 setopt appendhistory
 setopt sharehistory
 
-###############
 # Environment #
-###############
 export EDITOR="nvim"
 export VISUAL="nvim"
 export MANPAGER="nvim +Man!"
@@ -37,9 +33,8 @@ export HYPRSHOT_DIR=~/Pictures/
 export TERM=ghostty
 export CLICOLOR=1
 
-###########
 # Keymaps #
-###########
+
 # vi mode
 bindkey -e
 # tmux sessionizer keybind (ctrl+f)
@@ -52,15 +47,11 @@ export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git
 bindkey '^p' history-search-backward
 bindkey '^n' history-search-forward
 
-##########
 # ZStyle #
-##########
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
 
-############
 # Sourcing #
-############
 typeset -a sources
 sources+="$ZDOTDIR/aliases/aliases" # Aliases
 sources+="$ZDOTDIR/aliases/priv_aliases" # Private aliases
@@ -78,9 +69,7 @@ for file in $sources[@]; do
   fi
 done
 
-#######
 # FZF #
-#######
 source <(fzf --zsh)
 # For ** functionality
 # E.g.: cd ** {tab}, nvim ** {tab}
