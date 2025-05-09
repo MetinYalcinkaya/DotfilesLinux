@@ -29,7 +29,7 @@ alias -g ......="../../../../.."
 #######
 # Git #
 #######
-alias gs='git status -s'
+alias gs='git status'
 # alias gss='git status -s'
 alias ga='git add'
 alias gp='git push'

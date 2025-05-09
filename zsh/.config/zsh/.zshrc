@@ -36,7 +36,7 @@ export CLICOLOR=1
 # Keymaps #
 
 # vi mode
-bindkey -e
+bindkey -v
 # tmux sessionizer keybind (ctrl+f)
 bindkey -s ^f "tmux-sessionizer\n"
 # Use fd instead of fzf
@@ -87,6 +87,9 @@ autoload -Uz compinit && compinit
 # export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
 
 export PATH=$PATH:/home/metin/.spicetify
+
+# Rust bin
+export PATH=$PATH:~/.cargo/bin
 
 # bun completions
 [ -s "/home/metin/.bun/_bun" ] && source "/home/metin/.bun/_bun"

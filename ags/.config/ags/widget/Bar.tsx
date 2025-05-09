@@ -8,46 +8,46 @@ import Tray from "gi://AstalTray"
 // import Cava from "gi://AstalCava"
 
 function SysTray() {
-    const tray = Tray.get_default()
+  const tray = Tray.get_default()
 
-    return <box className="SysTray">
-        {bind(tray, "items").as(items => items.map(item => (
-            <menubutton
-                tooltipMarkup={bind(item, "tooltipMarkup")}
-                usePopover={false}
-                actionGroup={bind(item, "actionGroup").as(ag => ["dbusmenu", ag])}
-                menuModel={bind(item, "menuModel")}>
-                <icon gicon={bind(item, "gicon")} />
-            </menubutton>
-        )))}
-    </box>
+  return <box className="SysTray">
+    {bind(tray, "items").as(items => items.map(item => (
+      <menubutton
+        tooltipMarkup={bind(item, "tooltipMarkup")}
+        usePopover={false}
+        actionGroup={bind(item, "actionGroup").as(ag => ["dbusmenu", ag])}
+        menuModel={bind(item, "menuModel")}>
+        <icon gicon={bind(item, "gicon")} />
+      </menubutton>
+    )))}
+  </box>
 }
 
 function Media() {
-    const spotify = Mpris.Player.new("spotify");
+  const spotify = Mpris.Player.new("spotify");
 
-    return <box className="Media">
-        {bind(spotify, "available").as(avail =>
-            avail ? (
-                <box>
-                    <box
-                        className="Cover"
-                        valign={Gtk.Align.CENTER}
-                        css={bind(spotify, "coverArt").as(cover =>
-                            `background-image: url('${cover}');`
-                        )}
-                    />
-                    <label
-                        label={bind(spotify, "title").as(title =>
-                            `${title} - ${spotify.artist}`
-                        )}
-                    />
-                </box>
-            ) : (
-                <label label="Nothing Playing" />
-            )
-        )}
-    </box>;
+  return <box className="Media">
+    {bind(spotify, "available").as(avail =>
+      avail ? (
+        <box>
+          <box
+            className="Cover"
+            valign={Gtk.Align.CENTER}
+            css={bind(spotify, "coverArt").as(cover =>
+              `background-image: url('${cover}');`
+            )}
+          />
+          <label
+            label={bind(spotify, "title").as(title =>
+              `${title} - ${spotify.artist}`
+            )}
+          />
+        </box>
+      ) : (
+        <label label="Nothing Playing" />
+      )
+    )}
+  </box>;
 }
 
 // function CavaDraw() {
@@ -107,22 +107,22 @@ function Media() {
 // }
 
 function Workspaces() {
-    const hypr = Hyprland.get_default()
+  const hypr = Hyprland.get_default()
 
-    return <box className="Workspaces">
-        {bind(hypr, "workspaces").as(wss => wss
-            .filter(ws => !(ws.id >= -99 && ws.id <= -2)) // filter out special workspaces
-            .sort((a, b) => a.id - b.id)
-            .map(ws => (
-                <button
-                    className={bind(hypr, "focusedWorkspace").as(fw =>
-                        ws === fw ? "focused" : "")}
-                    onClicked={() => ws.focus()}>
-                    {ws.id}
-                </button>
-            ))
-        )}
-    </box>
+  return <box className="Workspaces">
+    {bind(hypr, "workspaces").as(wss => wss
+      .filter(ws => !(ws.id >= -99 && ws.id <= -2)) // filter out special workspaces
+      .sort((a, b) => a.id - b.id)
+      .map(ws => (
+        <button
+          className={bind(hypr, "focusedWorkspace").as(fw =>
+            ws === fw ? "focused" : "")}
+          onClicked={() => ws.focus()}>
+          {ws.id}
+        </button>
+      ))
+    )}
+  </box>
 }
 
 // function FocusedClient() {
@@ -138,36 +138,36 @@ function Workspaces() {
 //     </box>
 // }
 
-function Time({ format = "%I:%M %p - %A - %e/%m/%Y" }) {
-    const time = Variable<string>("").poll(1000, () =>
-        GLib.DateTime.new_now_local().format(format)!)
+function Time({ format = "%e/%m/%Y %A - %I:%M %p" }) {
+  const time = Variable<string>("").poll(1000, () =>
+    GLib.DateTime.new_now_local().format(format)!)
 
-    return <label
-        className="Time"
-        onDestroy={() => time.drop()}
-        label={time()}
-    />
+  return <label
+    className="Time"
+    onDestroy={() => time.drop()}
+    label={time()}
+  />
 }
 
 export default function Bar(monitor: Gdk.Monitor) {
-    const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
+  const { TOP, LEFT, RIGHT } = Astal.WindowAnchor
 
-    return <window
-        className="Bar"
-        gdkmonitor={monitor}
-        exclusivity={Astal.Exclusivity.EXCLUSIVE}
-        anchor={TOP | LEFT | RIGHT}>
-        <centerbox>
-            <box hexpand halign={Gtk.Align.START}>
-                <Workspaces />
-            </box>
-            <box>
-                <Media />
-            </box>
-            <box hexpand halign={Gtk.Align.END} >
-                <SysTray />
-                <Time />
-            </box>
-        </centerbox>
-    </window>
+  return <window
+    className="Bar"
+    gdkmonitor={monitor}
+    exclusivity={Astal.Exclusivity.EXCLUSIVE}
+    anchor={TOP | LEFT | RIGHT}>
+    <centerbox>
+      <box hexpand halign={Gtk.Align.START}>
+        <Workspaces />
+      </box>
+      <box>
+        <Media />
+      </box>
+      <box hexpand halign={Gtk.Align.END} >
+        <SysTray />
+        <Time />
+      </box>
+    </centerbox>
+  </window>
 }
