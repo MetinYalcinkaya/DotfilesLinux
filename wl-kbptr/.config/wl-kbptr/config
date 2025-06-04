@@ -1,0 +1,11 @@
+[general]
+home_row_keys=nrtshaeifou
+modes=floating
+
+[mode_floating]
+source=stdin
+label_color=#fffd
+label_select_color=#fd0d
+unselectable_bg_color=#2226
+selectable_bg_color=#1718
+selectable_border_color=#040c

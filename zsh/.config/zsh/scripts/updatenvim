@@ -1,0 +1,85 @@
+#!/bin/zsh
+
+set -euo pipefail
+
+# vars
+NVIM_URL="https://github.com/neovim/neovim/releases/download/nightly/nvim-linux-x86_64.tar.gz"
+ARCHIVE_NAME="${NVIM_URL##*/}"
+EXTRACTED_DIR_NAME="nvim-linux-x86_64"
+INSTALL_PREFIX="/usr/"
+
+cleanup() {
+    if [[ -n "${TMP_DIR:-}" && -d "${TMP_DIR}" ]]; then
+        echo "Cleaning up temporary directory: ${TMP_DIR}"
+        rm -rf "${TMP_DIR}"
+    fi
+}
+
+# Check if sudo is available and needed
+SUDO_CMD=""
+if [[ $EUID -ne 0 && "$INSTALL_PREFIX" == "/usr/" ]]; then # Only prompt for sudo if installing to /usr and not root
+    if command -v sudo >/dev/null 2>&1; then
+        SUDO_CMD="sudo"
+        echo "This script will need sudo privileges to install to ${INSTALL_PREFIX}"
+        # Prompt for sudo password upfront if needed for the cp command
+        $SUDO_CMD -v
+    else
+        echo "Error: sudo is required to install to ${INSTALL_PREFIX} but not found." >&2
+        exit 1
+    fi
+elif [[ $EUID -ne 0 && "$INSTALL_PREFIX" != "/usr" && ! -w "$INSTALL_PREFIX" ]]; then # Installing to non-/usr but no write access
+     if command -v sudo >/dev/null 2>&1; then
+        SUDO_CMD="sudo"
+        echo "This script will need sudo privileges to install to ${INSTALL_PREFIX} (no write access)"
+        $SUDO_CMD -v
+    else
+        echo "Error: sudo is required to install to ${INSTALL_PREFIX} (no write access) but not found." >&2
+        exit 1
+    fi
+fi
+
+
+# Create a temporary directory and set a trap to clean it up on exit
+TMP_DIR=$(mktemp -d -t nvim_install_XXXXXX)
+trap cleanup EXIT INT TERM
+
+echo "Created temporary directory: ${TMP_DIR}"
+cd "${TMP_DIR}"
+
+echo "Downloading latest nvim nightly from ${NVIM_URL}..."
+# -fS: fail silently on server errors, but show error if curl itself fails
+# -L: follow redirects
+# -O: save with remote name
+if ! curl -fsLO "${NVIM_URL}"; then
+    echo "Error: Failed to download Neovim archive." >&2
+    exit 1
+fi
+echo "Finished downloading ${ARCHIVE_NAME}"
+
+echo "Extracting ${ARCHIVE_NAME}..."
+if ! tar xzvf "${ARCHIVE_NAME}"; then
+    echo "Error: Failed to extract Neovim archive." >&2
+    exit 1
+fi
+echo "Finished extracting"
+
+# Check if the expected directory exists
+if [[ ! -d "${EXTRACTED_DIR_NAME}" ]]; then
+    echo "Error: Extracted directory '${EXTRACTED_DIR_NAME}' not found." >&2
+    exit 1
+fi
+
+echo "Installing Neovim to ${INSTALL_PREFIX}..."
+# Copy the *contents* of the extracted directory
+# The trailing slash on the source directory is important for `cp -r`
+# It ensures that the contents of `EXTRACTED_DIR_NAME` are copied,
+# not the directory itself.
+if ! ${SUDO_CMD} cp -f -r "${EXTRACTED_DIR_NAME}/." "${INSTALL_PREFIX}/"; then
+    echo "Error: Failed to move Neovim files to ${INSTALL_PREFIX}." >&2
+    exit 1
+fi
+echo "Finished installing"
+
+# Cleanup is handled by the trap
+
+echo "All done! Neovim nightly installed to ${INSTALL_PREFIX}."
