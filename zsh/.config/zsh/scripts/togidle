@@ -1,0 +1,9 @@
+#!/bin/zsh
+
+if ! pgrep -x "hypridle" > /dev/null; then
+  hypridle > /dev/null & disown
+  echo "Hypridle: -- ON --"
+else
+  killall hypridle
+  echo "Hypridle: -- OFF --"
+fi
