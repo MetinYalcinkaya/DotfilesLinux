@@ -7,7 +7,7 @@ alias vault="cd $HOME/Documents/Obsidian/Main/"
 alias dev="cd $HOME/Developer/"
 alias uni="cd $HOME/Uni/"
 alias unimnt="cd /mnt/uni/"
-alias kuni="sudo killall sshfs && sudo killall openvpn"
+alias kuni="sudo killall openvpn && sudo killall sshfs"
 alias vim="nvim"
 # Obsidian review
 alias or="nvim $HOME/Documents/Obsidian/Main/inbox/*.md"

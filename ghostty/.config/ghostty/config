@@ -23,7 +23,7 @@ font-style-italic = "Regular Italic"
 font-style-bold = "Bold"
 font-style-bold-italic = "Bold Italic"
 
-font-size = 18
+font-size = 18.5
 font-synthetic-style = false
 
 # Opentype Font Features

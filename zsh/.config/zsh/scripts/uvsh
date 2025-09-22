@@ -2,8 +2,7 @@
 
 uvsh() {
     local venv_name=${1:-'.venv'}
-    venv_name=${venv_name//\//} # remove trailing slashes (Linux)
-    venv_name=${venv_name//\\/} # remove trailing slashes (Windows)
+    venv_name=${venv_name//\//}
 
     local venv_bin=
     if [[ -d ${WINDIR} ]]; then
@@ -20,6 +19,5 @@ uvsh() {
         return 1
     fi
 
-    # shellcheck disable=SC1090
     source "${activator}"
 }

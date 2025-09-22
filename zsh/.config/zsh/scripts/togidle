@@ -2,8 +2,8 @@
 
 if ! pgrep -x "hypridle" > /dev/null; then
   hypridle > /dev/null & disown
-  echo "Hypridle: -- ON --"
+  notify-send "💤 PC will now sleep"
 else
   killall hypridle
-  echo "Hypridle: -- OFF --"
+  notify-send "☕ PC will stay awake"
 fi

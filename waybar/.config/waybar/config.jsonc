@@ -56,6 +56,12 @@
         // "format": "󰐥"
         "format": ""
     },
+    "custom/idle": {
+        "tooltip": false,
+        "on-click": "togidle &",
+        // "format": "󰐥"
+        "format": "󰒲"
+    },
     "cava": {
         "cava_config": "/home/metin/.config/cava/config",
         "framerate": 144,

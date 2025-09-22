@@ -10,7 +10,7 @@
 
 **Terminal:** Ghostty
 
-**Theme:** OneDarkPro
+**Theme:** Catppuccin Mocha
 
 ## Requirements
 

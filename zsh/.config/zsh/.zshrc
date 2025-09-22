@@ -29,8 +29,7 @@ setopt sharehistory
 export EDITOR="nvim"
 export VISUAL="nvim"
 export MANPAGER="nvim +Man!"
-export HYPRSHOT_DIR=~/Pictures/
-export TERM=ghostty
+export HYPRSHOT_DIR=~/Pictures
 export CLICOLOR=1
 
 # Keymaps #
@@ -93,8 +92,5 @@ export PATH=$PATH:~/.cargo/bin
 
 # bun completions
 [ -s "/home/metin/.bun/_bun" ] && source "/home/metin/.bun/_bun"
-
-# Created by `pipx` on 2024-12-13 07:43:17
-export PATH="$PATH:/home/metin/.local/bin"
 
 eval "$(uv generate-shell-completion zsh)"

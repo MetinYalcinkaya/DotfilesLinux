@@ -1,4 +1,4 @@
-@import "tokyonight.css";
+@import "mocha.css";
 
 * {
   font-family: MonoLisa, "Symbols Nerd Font";
@@ -15,73 +15,58 @@
 #workspaces {
   border-radius: 1rem;
   margin: 5px;
-  background-color: @bg;
+  background-color: @surface0;
   margin-left: 1rem;
 }
 
 #workspaces button {
-  color: @bg_highlight;
+  color: @lavendar;
   border-radius: 1rem;
   padding: 0.4rem;
 }
 
 #workspaces button.active {
-  color: @yellow;
+  color: @sky;
   border-radius: 1rem;
 }
 
 #workspaces button:hover {
-  color: @yellow;
+  color: @sapphire;
   border-radius: 1rem;
 }
 
 #custom-music,
 #cava,
 #tray,
-#backlight,
 #clock,
-#battery,
-#pulseaudio,
-#custom-lock,
-#custom-power {
-  background-color: @bg;
+#pulseaudio {
+  background-color: @surface0;
   padding: 0.5rem 1rem;
   margin: 5px 0;
 }
 
 #clock {
-  color: @blue2;
+  color: @sapphire;
   border-radius: 0px 1rem 1rem 0px;
   margin-right: 1rem;
 }
 
 #pulseaudio {
-  color: @red;
+  color: @maroon;
   border-radius: 1rem 0px 0px 1rem;
   margin-left: 1rem;
 }
 
 #custom-music {
-  color: @blue;
+  color: @mauve;
   border-radius: 1rem 0px 0px 1rem;
   margin-left: 1rem;
 }
 
 #cava {
-  color: @blue;
+  color: @mauve;
   border-radius: 0px 1rem 1rem 0px;
   margin-right: 1rem;
-}
-
-#custom-lock {
-    border-radius: 1rem 0px 0px 1rem;
-    color: @purple;
-}
-
-#custom-power {
-  color: @red1;
-  margin-right: 1rem;
-  border-radius: 0px 1rem 1rem 0px;
 }
 
 #tray {
@@ -90,6 +75,6 @@
 }
 
 #tray menu {
-  color: @purple;
-  background-color: @bg;
+  color: @lavendar;
+  background-color: @surface0;
 }

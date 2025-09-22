@@ -1,5 +1,0 @@
-#!/bin/zsh
-
-killall gjs
-sleep 2
-ags run & disown
