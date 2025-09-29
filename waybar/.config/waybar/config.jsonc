@@ -33,8 +33,7 @@
     "clock": {
         "timezone": "Australia/Sydney",
         "tooltip": false,
-        "format-alt": " {:%d/%m/%Y}",
-        "format": " {:%I:%M %p}"
+        "format": " {:%a %d/%m/%Y  %I:%M %p}",
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
