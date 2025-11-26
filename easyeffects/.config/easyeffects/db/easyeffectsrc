@@ -10,13 +10,13 @@ mostUsedPresets=Focal Clear
 outputDevice=alsa_output.usb-Schiit_Audio_Schiit_Modi_3-00.pro-output-0
 plugins=equalizer#0
 usedPresets=Focal Clear:2
-visiblePage=pluginsPage
 visiblePlugin=equalizer#0
 
 [Window]
 height=1076
 lastLoadedInputPreset=NR
 lastLoadedOutputPreset=Focal Clear
+visiblePage=inputPage
 visiblePipeWirePage=testSignalsPage
 visiblePresetSheetPage=autoloadingPage
 width=1916
