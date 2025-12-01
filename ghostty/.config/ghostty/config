@@ -9,22 +9,20 @@ theme = Catppuccin Mocha
 
 # Font
 # font-family = "MonoLisa Variable"
-font-family = "MonoLisa"
-# font-family = "Berkeley Mono"
-
-# Berkeley Mono
-# font-style = "Condensed"
-# font-style-italic = "Condensed Oblique"
-# font-style-bold = "Bold Condensed"
-# font-style-bold-italic = "Bold Condensed Oblique"
-# MonoLisa
-font-style = "Regular"
-font-style-italic = "Regular Italic"
-font-style-bold = "Bold"
-font-style-bold-italic = "Bold Italic"
+# font-family = "MonoLisa"
+font-family = "Berkeley Mono"
 
 font-size = 16.5
 font-synthetic-style = false
+
+# Berkeley Build
+# Ticket: 0J2NJW0X
+# Dot Zero 0
+# Regular 7
+# Regular bar |
+# Second with arch
+# 80 width
+# -12 Oblique
 
 # Opentype Font Features
 # List of MonoLisa features
@@ -53,14 +51,15 @@ font-synthetic-style = false
 # ss17 = Alt ..= and .=
 ##################################
 
-font-feature = calt
-# font-feature = ss01
-# font-feature = ss02
-font-feature = ss07
-font-feature = ss08
-font-feature = ss13
-font-feature = ss14
-# font-feature = ss17
+# font-feature = -calt
+# font-feature = -liga
+# # font-feature = ss01
+# # font-feature = ss02
+# font-feature = ss07
+# font-feature = ss08
+# font-feature = ss13
+# font-feature = ss14
+# # font-feature = ss17
 
 # For variable font
 # font-variation = wght=600
@@ -78,7 +77,6 @@ font-codepoint-map = U+e000-U+e00a,U+ea60-U+ebeb,U+e0a0-U+e0c8,U+e0ca,U+e0cc-U+e
 # Not sure why setting this to powerline symbols breaks it?
 # It also breaks if I completely comment it out 💀
 font-codepoint-map = U+E0A0-U+E0A3,U+E0C0-U+E0C7,U+E0B0-U+E0B3=
-
 
 # Cursor
 cursor-style = block
