@@ -90,7 +90,5 @@ export PATH=$PATH:/home/metin/.spicetify
 # Rust bin
 export PATH=$PATH:~/.cargo/bin
 
-# bun completions
-[ -s "/home/metin/.bun/_bun" ] && source "/home/metin/.bun/_bun"
-
 eval "$(uv generate-shell-completion zsh)"
+eval "$(just --completions zsh)"
