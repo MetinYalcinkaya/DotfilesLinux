@@ -20,7 +20,7 @@ font-synthetic-style = false
 # Dot Zero 0
 # Regular 7
 # Regular bar |
-# Second with arch
+# Second with r arch
 # 80 width
 # -12 Oblique
 
@@ -110,3 +110,6 @@ keybind = clear
 keybind = ctrl+shift+v=paste_from_clipboard
 keybind = super+shift+comma=reload_config
 keybind = super+alt+i=inspector:toggle
+keybind = ctrl+equal=increase_font_size:0.25
+keybind = ctrl+-=decrease_font_size:0.25
+keybind = ctrl+0=reset_font_size

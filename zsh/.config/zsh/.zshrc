@@ -83,12 +83,8 @@ autoload -Uz compinit && compinit
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
-# export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-
-export PATH=$PATH:/home/metin/.spicetify
 
 # Rust bin
 export PATH=$PATH:~/.cargo/bin
 
 eval "$(uv generate-shell-completion zsh)"
-eval "$(just --completions zsh)"
