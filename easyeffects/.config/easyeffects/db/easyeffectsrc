@@ -1,22 +1,23 @@
 [StreamInputs]
-inputDevice=alsa_input.usb-RODE_Microphones_RODE_NT-USB-00.analog-stereo
+inputDevice=alsa_input.usb-Focusrite_Vocaster_One_USB_V1TANVK270375A-00.multichannel-input
 mostUsedPresets=NR,Testing,Main,Noise Reduction
-plugins=deepfilternet#0
+plugins=rnnoise#0,deepfilternet#0,gate#0
 usedPresets=Noise Reduction:2,Main:2,Testing:2,NR:6
-visiblePlugin=deepfilternet#0
+visiblePage=pluginsPage
+visiblePlugin=rnnoise#0
 
 [StreamOutputs]
 mostUsedPresets=Focal Clear
-outputDevice=alsa_output.usb-Schiit_Audio_Schiit_Modi_3-00.pro-output-0
+outputDevice=alsa_output.usb-Schiit_Audio_Schiit_Modi_3-00.analog-stereo
 plugins=equalizer#0
 usedPresets=Focal Clear:2
+visiblePage=pluginsPage
 visiblePlugin=equalizer#0
 
 [Window]
-height=1076
+height=716
 lastLoadedInputPreset=NR
 lastLoadedOutputPreset=Focal Clear
 visiblePage=inputPage
-visiblePipeWirePage=testSignalsPage
 visiblePresetSheetPage=autoloadingPage
-width=1916
+width=1276
