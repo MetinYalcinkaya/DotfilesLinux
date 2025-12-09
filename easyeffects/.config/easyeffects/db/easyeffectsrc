@@ -1,14 +1,14 @@
 [StreamInputs]
-inputDevice=alsa_input.usb-Focusrite_Vocaster_One_USB_V1TANVK270375A-00.multichannel-input
+inputDevice=alsa_input.usb-Focusrite_Vocaster_One_USB_V1TANVK270375A-00.pro-input-0
 mostUsedPresets=NR,Testing,Main,Noise Reduction
 plugins=rnnoise#0,deepfilternet#0,gate#0
 usedPresets=Noise Reduction:2,Main:2,Testing:2,NR:6
 visiblePage=pluginsPage
-visiblePlugin=rnnoise#0
+visiblePlugin=gate#0
 
 [StreamOutputs]
 mostUsedPresets=Focal Clear
-outputDevice=alsa_output.usb-Schiit_Audio_Schiit_Modi_3-00.analog-stereo
+outputDevice=alsa_output.usb-Schiit_Audio_Schiit_Modi_3-00.pro-output-0
 plugins=equalizer#0
 usedPresets=Focal Clear:2
 visiblePage=pluginsPage
