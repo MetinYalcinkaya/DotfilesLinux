@@ -223,20 +223,23 @@ ShellRoot {
                     Item { width: 8 }
 
                     Repeater {
-                        model: 9
+                        model: Array.from(Hyprland.workspaces.values)
+                            .filter(ws => ws.id > 0)
+                            .sort((a, b) => a.id - b.id)
 
                         Rectangle {
                             Layout.preferredWidth: 20
                             Layout.preferredHeight: parent.height
                             color: "transparent"
 
-                            property var workspace: Hyprland.workspaces.values.find(ws => ws.id === index + 1) ?? null
-                            property bool isActive: Hyprland.focusedWorkspace?.id === (index + 1)
-                            property bool hasWindows: workspace !== null
+                            property var workspace: modelData
+                            property int wsId: workspace.id
+                            property bool isFocused: Hyprland.focusedWorkspace === workspace
 
                             Text {
-                                text: index + 1
-                                color: parent.isActive ? root.colorTeal : (parent.hasWindows ? root.colorTeal : root.colorOverlay)
+                                text: parent.wsId
+                                color: parent.isFocused ? root.colorTeal : root.colorOverlay
+
                                 font.pixelSize: root.fontSize
                                 font.family: root.fontFamily
                                 font.bold: true
@@ -246,14 +249,14 @@ ShellRoot {
                             Rectangle {
                                 width: 20
                                 height: 3
-                                color: parent.isActive ? root.colorMauve : root.colorBase
+                                color: parent.isFocused ? root.colorMauve : "transparent"
                                 anchors.horizontalCenter: parent.horizontalCenter
                                 anchors.bottom: parent.bottom
                             }
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: Hyprland.dispatch("workspace " + (index + 1))
+                                onClicked: Hyprland.dispatch("workspace " + parent.wsId)
                             }
                         }
                     }
