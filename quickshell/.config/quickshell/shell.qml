@@ -193,6 +193,7 @@ ShellRoot {
         model: Quickshell.screens
 
         PanelWindow {
+            id: panel
             property var modelData
             screen: modelData
 
@@ -225,6 +226,7 @@ ShellRoot {
                     Repeater {
                         model: Array.from(Hyprland.workspaces.values)
                             .filter(ws => ws.id > 0)
+                            .filter(ws => ws.monitor.name === panel.screen.name)
                             .sort((a, b) => a.id - b.id)
 
                         Rectangle {
