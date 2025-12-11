@@ -172,62 +172,61 @@ ShellRoot {
                 right: true
             }
 
-            implicitHeight: 30
+            implicitHeight: 32
             color: root.colorBase
 
-            margins {
-                top: 0
-                bottom: 0
-                left: 0
-                right: 0
-            }
-
+            // status bar
             Rectangle {
                 anchors.fill: parent
                 color: root.colorBase
 
+                // left modules
                 RowLayout {
-                    anchors.fill: parent
-                    spacing: 0
+                    anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.leftMargin: 8
+                    spacing: 8
 
-                    Item { width: 8 }
-
-                    Repeater {
-                        model: Array.from(Hyprland.workspaces.values)
-                            .filter(ws => ws.id > 0)
-                            .filter(ws => ws.monitor.name === panel.screen.name)
-                            .sort((a, b) => a.id - b.id)
-
-                        Rectangle {
-                            Layout.preferredWidth: 20
-                            Layout.preferredHeight: parent.height
-                            color: "transparent"
-
-                            property var workspace: modelData
-                            property int wsId: workspace.id
-                            property bool isFocused: Hyprland.focusedWorkspace === workspace
-
-                            Text {
-                                text: parent.wsId
-                                color: parent.isFocused ? root.colorTeal : root.colorOverlay
-
-                                font.pixelSize: root.fontSize
-                                font.family: root.fontFamily
-                                font.bold: true
-                                anchors.centerIn: parent
-                            }
+                    // workspaces repeater
+                    RowLayout {
+                        spacing: 0
+                        Repeater {
+                            model: Array.from(Hyprland.workspaces.values)
+                                .filter(ws => ws.id > 0)
+                                .filter(ws => ws.monitor.name === panel.screen.name)
+                                .sort((a, b) => a.id - b.id)
 
                             Rectangle {
-                                width: 20
-                                height: 3
-                                color: parent.isFocused ? root.colorMauve : "transparent"
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.bottom: parent.bottom
-                            }
+                                Layout.preferredWidth: 20
+                                Layout.fillHeight: true
+                                color: "transparent"
 
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: Hyprland.dispatch("workspace " + parent.wsId)
+                                property var workspace: modelData
+                                property int wsId: workspace.id
+                                property bool isFocused: Hyprland.focusedWorkspace === workspace
+
+                                Text {
+                                    text: parent.wsId
+                                    color: parent.isFocused ? root.colorTeal : root.colorOverlay
+                                    font.pixelSize: root.fontSize
+                                    font.family: root.fontFamily
+                                    font.bold: true
+                                    anchors.centerIn: parent
+                                }
+
+                                Rectangle {
+                                    width: 20
+                                    height: 3
+                                    color: parent.isFocused ? root.colorMauve : "transparent"
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.bottom: parent.bottom
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: Hyprland.dispatch("workspace " + parent.wsId)
+                                }
                             }
                         }
                     }
@@ -236,118 +235,110 @@ ShellRoot {
                         Layout.preferredWidth: 1
                         Layout.preferredHeight: 16
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.leftMargin: 8
-                        Layout.rightMargin: 8
                         color: root.colorOverlay
                     }
 
+                    // current layout
                     Text {
                         text: currentLayout
                         color: root.colorText
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
                         font.bold: true
-                        Layout.leftMargin: 5
-                        Layout.rightMargin: 5
                     }
 
                     Rectangle {
                         Layout.preferredWidth: 1
                         Layout.preferredHeight: 16
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.leftMargin: 2
-                        Layout.rightMargin: 8
                         color: root.colorOverlay
                     }
 
+                    // active window title
                     Text {
                         text: activeWindow
                         color: root.colorMauve
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
                         font.bold: true
-                        Layout.fillWidth: true
-                        Layout.leftMargin: 8
                         elide: Text.ElideRight
-                        maximumLineCount: 1
+                        Layout.maximumWidth: 400
                     }
+                }
 
-                    Rectangle {
-                        visible: spotifyText !== ""
-                        Layout.preferredWidth: 1
-                        Layout.preferredHeight: 16
-                        Layout.alignment: Qt.AlignVCenter
-                        Layout.leftMargin: 2
-                        Layout.rightMargin: 8
-                        color: root.colorOverlay
-                    }
+                // center modules
+                RowLayout {
+                    anchors.centerIn: parent
+                    visible: spotifyText !== ""
 
                     Text {
-                        visible: spotifyText !== ""
                         text: spotifyText
                         color: root.colorGreen
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
                         font.bold: true
-                        Layout.rightMargin: 8
-                        elide: Text.ElideRight
-                        Layout.maximumWidth: 300
-                    }
 
+                        elide: Text.ElideRight
+                        Layout.maximumWidth: 500
+                    }
+                }
+
+                // right modules
+                RowLayout {
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    anchors.rightMargin: 8
+                    spacing: 8
+
+                    // cpu
                     Text {
                         text: "CPU: " + cpuUsage + "%"
                         color: root.colorYellow
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
                         font.bold: true
-                        Layout.rightMargin: 8
                     }
 
                     Rectangle {
                         Layout.preferredWidth: 1
                         Layout.preferredHeight: 16
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.leftMargin: 0
-                        Layout.rightMargin: 8
                         color: root.colorOverlay
                     }
 
+                    // mem
                     Text {
                         text: "Mem: " + memUsage + "%"
-                        color: root.colorTeal
+                        color: root.colorYellow
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
                         font.bold: true
-                        Layout.rightMargin: 8
                     }
 
                     Rectangle {
                         Layout.preferredWidth: 1
                         Layout.preferredHeight: 16
                         Layout.alignment: Qt.AlignVCenter
-                        Layout.leftMargin: 0
-                        Layout.rightMargin: 8
                         color: root.colorOverlay
                     }
 
+                    // clock
                     Text {
                         id: clockText
-                        text: Qt.formatDateTime(new Date(), "ddd, MMM dd - hh:mm AP")
-                        color: root.colorTeal
+                        text: Qt.formatDateTime(new Date(), "ddd, MMM, dd - hh:mm AP")
+                        color: root.colorMauve
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
                         font.bold: true
-                        Layout.rightMargin: 8
 
                         Timer {
                             interval: 1000
                             running: true
                             repeat: true
-                            onTriggered: clockText.text = Qt.formatDateTime(new Date(), "ddd, MMM dd - hh:mm AP")
+                            onTriggered: clockText.text = Qt.formatDateTime(new Date(), "ddd, MMM, dd - hh:mm AP")
                         }
                     }
-
-                    Item { width: 8 }
                 }
             }
         }
