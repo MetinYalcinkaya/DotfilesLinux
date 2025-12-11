@@ -17,6 +17,7 @@ ShellRoot {
     property color colorRed: "#f38ba8"
     property color colorYellow: "#f9e2af"
     property color colorBlue: "#89b4fa"
+    property color colorGreen: "#a6e3a1"
 
 
     // font
@@ -35,6 +36,9 @@ ShellRoot {
     // cpu properties
     property var lastCpuIdle: 0
     property var lastCpuTotal: 0
+
+    // media property
+    property string spotifyText: ""
 
     // kernel process
     Process {
@@ -156,6 +160,18 @@ ShellRoot {
         Component.onCompleted: running = true
     }
 
+    // spotify process
+    Process {
+        id: spotifyProc
+        command: ["sh", "-c", "if [ \"$(playerctl -p spotify status 2>/dev/null)\" = \"Playing\" ]; then playerctl -p spotify metadata --format '{{ title }} - {{ artist }}'; else echo ''; fi"]
+        stdout: SplitParser {
+            onRead: data => {
+                spotifyText = data ? data.trim() : ""
+            }
+        }
+        Component.onCompleted: running = true
+    }
+
     // slow timer for system stats
     Timer {
         interval: 2000
@@ -166,6 +182,7 @@ ShellRoot {
             memProc.running = true
             diskProc.running = true
             volProc.running = true
+            spotifyProc.running = true
         }
     }
 
@@ -301,6 +318,28 @@ ShellRoot {
                         Layout.leftMargin: 8
                         elide: Text.ElideRight
                         maximumLineCount: 1
+                    }
+
+                    Rectangle {
+                        visible: spotifyText !== ""
+                        Layout.preferredWidth: 1
+                        Layout.preferredHeight: 16
+                        Layout.alignment: Qt.AlignVCenter
+                        Layout.leftMargin: 2
+                        Layout.rightMargin: 8
+                        color: root.colorOverlay
+                    }
+
+                    Text {
+                        visible: spotifyText !== ""
+                        text: spotifyText
+                        color: root.colorGreen
+                        font.pixelSize: root.fontSize
+                        font.family: root.fontFamily
+                        font.bold: true
+                        Layout.rightMargin: 8
+                        elide: Text.ElideRight
+                        Layout.maximumWidth: 300
                     }
 
                     Text {
