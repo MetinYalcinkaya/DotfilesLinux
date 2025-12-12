@@ -31,6 +31,7 @@ Item {
 
         W.Separator { theme: right.theme }
         W.Clock { theme: right.theme }
+        W.Separator { theme: right.theme }
         W.Tray { panel: right.panel; theme: right.theme }
     }
 }
