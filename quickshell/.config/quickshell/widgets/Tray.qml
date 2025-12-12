@@ -87,7 +87,7 @@ Item {
         Text {
             anchors.centerIn: parent
             // TODO: change?
-            text: "󰒱"
+            text: ""
             color: theme.text
             font.pixelSize: theme.fontSize - 2
             font.family: theme.fontFamily
@@ -125,8 +125,6 @@ Item {
             topLeftRadius: 0
             topRightRadius: 0
             color: theme.base
-            border.color: theme.overlay
-            border.width: 1
 
             opacity: trayOpen ? 1 : 0
             scale: trayOpen ? 1 : 0.98
