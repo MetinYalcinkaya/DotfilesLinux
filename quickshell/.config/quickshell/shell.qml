@@ -1,7 +1,10 @@
+//@ pragma UseQApplication
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Io
 import Quickshell.Hyprland
+import Quickshell.Services.SystemTray
+import Quickshell.Widgets
 import QtQuick
 import QtQuick.Layouts
 
@@ -352,6 +355,49 @@ ShellRoot {
                             running: true
                             repeat: true
                             onTriggered: clockText.text = Qt.formatDateTime(new Date(), "ddd, MMM, dd - hh:mm AP")
+                        }
+                    }
+
+                    Rectangle {
+                        Layout.preferredWidth: 1
+                        Layout.preferredHeight: 16
+                        Layout.alignment: Qt.AlignVCenter
+                        color: root.colorOverlay
+                        visible: trayRepeater.count > 0
+                    }
+
+                    RowLayout {
+                        spacing: 4
+
+                        Repeater {
+                            id: trayRepeater
+                            model: SystemTray.items
+
+                            Rectangle {
+                                Layout.preferredWidth: 24
+                                Layout.preferredHeight: 24
+                                color: "transparent"
+
+                                IconImage {
+                                    anchors.centerIn: parent
+                                    width: 16
+                                    height: 16
+                                    source: modelData.icon
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+                                    onClicked: (mouse) => {
+                                        if (mouse.button === Qt.LeftButton) {
+                                            modelData.activate()
+                                        } else if (mouse.button === Qt.RightButton) {
+                                            var pos = parent.mapToItem(panel.contentItem, 0, height)
+                                            modelData.display(panel, pos.x, pos.y)
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
