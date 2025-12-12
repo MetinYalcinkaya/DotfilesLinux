@@ -201,7 +201,7 @@ ShellRoot {
                         Repeater {
                             model: Array.from(Hyprland.workspaces.values)
                                 .filter(ws => ws.id > 0)
-                                .filter(ws => ws.monitor.name === panel.screen.name)
+                                .filter(ws => ws.monitor && ws.monitor.name === panel.screen.name)
                                 .sort((a, b) => a.id - b.id)
 
                             Rectangle {
