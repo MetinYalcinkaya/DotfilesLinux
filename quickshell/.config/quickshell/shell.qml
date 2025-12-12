@@ -36,6 +36,7 @@ ShellRoot {
 
     // media property
     property string spotifyText: ""
+    property bool isSpotifyPlaying: false
 
     // cpu usage
     Process {
@@ -120,7 +121,13 @@ ShellRoot {
         command: ["sh", "-c", "if [ \"$(playerctl -p spotify status 2>/dev/null)\" = \"Playing\" ]; then playerctl -p spotify metadata --format '{{ title }} - {{ artist }}'; else echo ''; fi"]
         stdout: SplitParser {
             onRead: data => {
-                spotifyText = data ? data.trim() : ""
+                const cleanData = data ? data.trim() : ""
+                if (cleanData !== "") {
+                    spotifyText = cleanData
+                    isSpotifyPlaying = true
+                } else {
+                    isSpotifyPlaying = false
+                }
             }
         }
         Component.onCompleted: running = true
@@ -269,7 +276,15 @@ ShellRoot {
                 // center modules
                 RowLayout {
                     anchors.centerIn: parent
-                    visible: spotifyText !== ""
+                    opacity: root.isSpotifyPlaying ? 1 : 0
+                    visible: opacity > 0
+
+                    Behavior on opacity {
+                        NumberAnimation {
+                            duration: 300
+                            easing.type: Easing.OutQuad
+                        }
+                    }
 
                     Text {
                         text: spotifyText
