@@ -31,6 +31,14 @@ Item {
         trayMenuRoot = null
     }
 
+    function pushMenu(entry) {
+        trayMenuStack = trayMenuStack.concat([entry])
+    }
+
+    function popMenu() {
+        trayMenuStack = trayMenuStack.slice(0, -1)
+    }
+
     implicitWidth: row.implicitWidth
     implicitHeight: row.implicitHeight
 
@@ -86,7 +94,7 @@ Item {
 
                         MouseArea {
                             anchors.fill: parent
-                            onClicked: trayMenuStack.pop()
+                            onClicked: trayMenuStack.popMenu()
                         }
                     }
 
@@ -163,7 +171,7 @@ Item {
 
                                     onClicked: {
                                         if (entry.hasChildren) {
-                                            trayMenuStack.push(entry)
+                                            trayMenuStack.pushMenu(entry)
                                         } else {
                                             entry.triggered()
                                             closeTrayMenu()
