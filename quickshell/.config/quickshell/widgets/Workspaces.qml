@@ -9,7 +9,7 @@ RowLayout {
     spacing: 0
 
     Repeater {
-        model: Array.from(Hyprland.workspaces.values)
+        model: Hyprland.workspaces.values
             .filter(ws => ws.id > 0)
             .filter(ws => ws.monitor && ws.monitor.name === panel.screen.name)
 
