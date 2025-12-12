@@ -4,6 +4,7 @@ import Quickshell.Wayland
 import Quickshell.Io
 import Quickshell.Hyprland
 import Quickshell.Services.SystemTray
+import Quickshell.Services.Mpris
 import Quickshell.Widgets
 import QtQuick
 import QtQuick.Layouts
@@ -37,9 +38,22 @@ ShellRoot {
     property var lastCpuIdle: 0
     property var lastCpuTotal: 0
 
-    // media property
-    property string spotifyText: ""
-    property bool isSpotifyPlaying: false
+    // media
+    property var spotifyPlayer: Mpris.players.values.find(p => p.identity === "Spotify")
+    property bool isSpotifyPlaying: spotifyPlayer
+        && spotifyPlayer.playbackState === MprisPlaybackState.Playing
+
+    property string spotifyText: {
+        if (!spotifyPlayer) return ""
+        const meta = spotifyPlayer.metadata
+        const title = meta["xesam:title"] || "No Title"
+        const artistRaw = meta["xesam:artist"]
+        const artist = Array.isArray(artistRaw)
+            ? artistRaw.join(", ")
+            : (artistRaw || "")
+            
+        return artist ? title + " - " + artist : title
+    }
 
     // cpu usage
     Process {
@@ -118,24 +132,6 @@ ShellRoot {
         Component.onCompleted: running = true
     }
 
-    // spotify process
-    Process {
-        id: spotifyProc
-        command: ["sh", "-c", "if [ \"$(playerctl -p spotify status 2>/dev/null)\" = \"Playing\" ]; then playerctl -p spotify metadata --format '{{ title }} - {{ artist }}'; else echo ''; fi"]
-        stdout: SplitParser {
-            onRead: data => {
-                const cleanData = data ? data.trim() : ""
-                if (cleanData !== "") {
-                    spotifyText = cleanData
-                    isSpotifyPlaying = true
-                } else {
-                    isSpotifyPlaying = false
-                }
-            }
-        }
-        Component.onCompleted: running = true
-    }
-
     // slow timer for system stats
     Timer {
         interval: 2000
@@ -162,7 +158,6 @@ ShellRoot {
         running: true
         repeat: true
         onTriggered: {
-            spotifyProc.running = true
             windowProc.running = true
             layoutProc.running = true
         }
