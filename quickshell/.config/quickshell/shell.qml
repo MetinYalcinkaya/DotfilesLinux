@@ -30,9 +30,10 @@ ShellRoot {
 
     // system info properties
     property int cpuUsage: 0
-    property int memUsage: 0
-    property string activeWindow: "Window"
-    property string currentLayout: "Tiled"
+
+    // hyprland
+    readonly property var focusedWindow: Hyprland.toplevels.values.find(p => p.activated === true)
+    readonly property string activeWindow: focusedWindow ? focusedWindow.title : ""
 
     // cpu properties
     property var lastCpuIdle: 0
@@ -88,50 +89,6 @@ ShellRoot {
         Component.onCompleted: running = true
     }
 
-    // mem usage
-    Process {
-        id: memProc
-        command: ["sh", "-c", "free | grep Mem"]
-        stdout: SplitParser {
-            onRead: data => {
-                if (!data) return
-                var parts = data.trim().split(/\s+/)
-                var total = parseInt(parts[1]) || 1
-                var used = parseInt(parts[2]) || 0
-                memUsage = Math.round(100 * used / total)
-            }
-        }
-        Component.onCompleted: running = true
-    }
-
-    // active window title
-    Process {
-        id: windowProc
-        command: ["sh", "-c", "hyprctl activewindow -j | jq -r '.title // empty'"]
-        stdout: SplitParser {
-            onRead: data => {
-                if (data && data.trim()) {
-                    activeWindow = data.trim()
-                }
-            }
-        }
-        Component.onCompleted: running = true
-    }
-
-    // current layout (Hyprland: dwindle/master/floating)
-    Process {
-        id: layoutProc
-        command: ["sh", "-c", "hyprctl activewindow -j | jq -r 'if .floating then \"Floating\" elif .fullscreen == 1 then \"Fullscreen\" else \"Tiled\" end'"]
-        stdout: SplitParser {
-            onRead: data => {
-                if (data && data.trim()) {
-                    currentLayout = data.trim()
-                }
-            }
-        }
-        Component.onCompleted: running = true
-    }
-
     // slow timer for system stats
     Timer {
         interval: 2000
@@ -139,27 +96,6 @@ ShellRoot {
         repeat: true
         onTriggered: {
             cpuProc.running = true
-            memProc.running = true
-        }
-    }
-
-    // Event-based updates for window/layout (instant)
-    Connections {
-        target: Hyprland
-        function onRawEvent(event) {
-            windowProc.running = true
-            layoutProc.running = true
-        }
-    }
-
-    // Backup timer for window/layout (catches edge cases)
-    Timer {
-        interval: 200
-        running: true
-        repeat: true
-        onTriggered: {
-            windowProc.running = true
-            layoutProc.running = true
         }
     }
 
@@ -243,22 +179,6 @@ ShellRoot {
                         color: root.colorOverlay
                     }
 
-                    // current layout
-                    Text {
-                        text: currentLayout
-                        color: root.colorText
-                        font.pixelSize: root.fontSize
-                        font.family: root.fontFamily
-                        font.bold: true
-                    }
-
-                    Rectangle {
-                        Layout.preferredWidth: 1
-                        Layout.preferredHeight: 16
-                        Layout.alignment: Qt.AlignVCenter
-                        color: root.colorOverlay
-                    }
-
                     // active window title
                     Text {
                         text: activeWindow
@@ -267,7 +187,7 @@ ShellRoot {
                         font.family: root.fontFamily
                         font.bold: true
                         elide: Text.ElideRight
-                        Layout.maximumWidth: 400
+                        Layout.maximumWidth: 500
                     }
                 }
 
@@ -307,22 +227,6 @@ ShellRoot {
                     // cpu
                     Text {
                         text: "CPU: " + cpuUsage + "%"
-                        color: root.colorYellow
-                        font.pixelSize: root.fontSize
-                        font.family: root.fontFamily
-                        font.bold: true
-                    }
-
-                    Rectangle {
-                        Layout.preferredWidth: 1
-                        Layout.preferredHeight: 16
-                        Layout.alignment: Qt.AlignVCenter
-                        color: root.colorOverlay
-                    }
-
-                    // mem
-                    Text {
-                        text: "Mem: " + memUsage + "%"
                         color: root.colorYellow
                         font.pixelSize: root.fontSize
                         font.family: root.fontFamily
