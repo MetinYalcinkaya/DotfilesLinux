@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import qs.widgets as W
 
 Item {
+    id: left
     required property var panel
     required property var theme
 
@@ -19,8 +20,8 @@ Item {
         anchors.fill: parent
         spacing: 8
 
-        W.Workspaces { panel: panel; theme: theme }
-        W.Separator { theme: theme }
-        W.ActiveWindow { theme: theme }
+        W.Workspaces { panel: left.panel; theme: left.theme }
+        W.Separator { theme: left.theme }
+        W.ActiveWindow { theme: left.theme }
     }
 }

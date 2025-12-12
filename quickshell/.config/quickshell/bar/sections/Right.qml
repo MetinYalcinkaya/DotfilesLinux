@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import qs.widgets as W
 
 Item {
+    id: right
     required property var panel
     required property var theme
     required property var cpu
@@ -28,8 +29,8 @@ Item {
             font.bold: true
         }
 
-        W.Separator { theme: theme }
-        W.Clock { theme: theme }
-        W.Tray { panel: panel; theme: theme }
+        W.Separator { theme: right.theme }
+        W.Clock { theme: right.theme }
+        W.Tray { panel: right.panel; theme: right.theme }
     }
 }
