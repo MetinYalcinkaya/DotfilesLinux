@@ -5,7 +5,7 @@ import QtQuick.Layouts
 Text {
     required property var theme
 
-    readonly property var focusedWindow: Hyprland.toplevels.values.find(p => p.activated === true)
+    readonly property var focusedWindow: Hyprland.activeToplevel
     text: focusedWindow ? focusedWindow.title : ""
 
     color: theme.mauve
