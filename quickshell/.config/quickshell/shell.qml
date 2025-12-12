@@ -1,4 +1,3 @@
-//@ pragma UseQApplication
 import Quickshell
 import Quickshell.Wayland
 import Quickshell.Io
@@ -41,7 +40,7 @@ ShellRoot {
 
     // media
     property var spotifyPlayer: Mpris.players.values.find(p => p.identity === "Spotify")
-    property bool isSpotifyPlaying: spotifyPlayer
+    property bool isSpotifyPlaying: !!spotifyPlayer
         && spotifyPlayer.playbackState === MprisPlaybackState.Playing
 
     property string spotifyText: {
@@ -55,6 +54,7 @@ ShellRoot {
             
         return artist ? title + " - " + artist : title
     }
+
 
     // cpu usage
     Process {
@@ -106,6 +106,28 @@ ShellRoot {
             id: panel
             property var modelData
             screen: modelData
+
+            // tray properties and functions
+            property var trayMenuRoot: null
+            property var trayMenuStack: []
+            property int trayMenuX: 0
+            property int trayMenuY: 0
+
+            function openTrayMenu(trayItem, x, y) {
+                trayMenuRoot = trayItem.menu
+                trayMenuStack = []
+                trayMenuX = x
+                trayMenuY = y
+                trayMenuWin.visible = true
+                trayGrab.active = true
+            }
+
+            function closeTrayMenu() {
+                trayMenuWin.visible = false
+                trayGrab.active = false
+                trayMenuStack = []
+                trayMenuRoot = null
+            }
 
             anchors {
                 top: true
@@ -268,6 +290,158 @@ ShellRoot {
                     RowLayout {
                         spacing: 4
 
+                        PopupWindow {
+                            id: trayMenuWin
+                            anchor.window: panel
+                            anchor.rect.x: panel.trayMenuX
+                            anchor.rect.y: panel.trayMenuY
+                            anchor.rect.w: 1
+                            anchor.rect.h: 1
+                            visible: false
+                            color: "transparent"
+                            implicitWidth: menuBox.implicitWidth
+                            implicitHeight: menuBox.implicitHeight
+
+                            Rectangle {
+                                id: menuBox
+                                implicitWidth: 260
+                                implicitHeight: menuCol.implicitHeight
+                                radius: 10
+                                color: root.colorBase
+                                border.color: root.colorOverlay
+                                border.width: 1
+
+                                // animation
+                                opacity: trayMenuWin.visible ? 1 : 0
+                                scale: trayMenuWin.visible ? 1 : 0.98
+                                Behavior on opacity { NumberAnimation { duration: 140; easing.type: Easing.OutQuad } }
+                                Behavior on scale { NumberAnimation { duration: 140; easing.type: Easing.OutQuad } }
+
+                                Column {
+                                    id: menuCol
+                                    padding: 8
+                                    spacing: 2
+
+                                    Rectangle {
+                                        visible: panel.trayMenuStack.length > 0
+                                        height: visible ? 28 : 0
+                                        width: parent.width
+                                        radius: 6
+                                        color: "transparent"
+
+                                        Text {
+                                            anchors.verticalCenter: parent.verticalCenter
+                                            text: "<- Back"
+                                            color: root.colorText
+                                            font.pixelSize: root.fontSize - 2
+                                            font.family: root.fontFamily
+                                        }
+
+                                        MouseArea {
+                                            anchors.fill: parent
+                                            onClicked: panel.trayMenuStack.pop()
+                                        }
+                                    }
+
+                                    QsMenuOpener {
+                                        id: trayMenuOpener
+                                        menu: panel.trayMenuStack.length > 0
+                                            ? panel.trayMenuStack[panel.trayMenuStack.length - 1]
+                                            : panel.trayMenuRoot
+                                    }
+
+                                    Repeater {
+                                        model: trayMenuOpener.children
+                                        
+                                        delegate: Item {
+                                            id: row
+                                            width: menuBox.width - 16
+                                            height: entry.isSeparator ? 10 : 28
+
+                                            property var entry: modelData
+
+                                            // separator
+                                            Rectangle {
+                                                visible: entry.isSeparator
+                                                anchors.verticalCenter: parent.verticalCenter
+                                                width: parent.width
+                                                height: 1
+                                                color: root.colorOverlay
+                                                opacity: 0.6
+                                            }
+
+                                            // normal row
+                                            Rectangle {
+                                                visible: !entry.isSeparator
+                                                anchors.fill: parent
+                                                radius: 6
+                                                color: hover.containsMouse ? Qt.rgba(1,1,1,0.06) : "transparent"
+                                                opacity: entry.enabled ? 1 : 0.45
+
+                                                Row {
+                                                    anchors.fill: parent
+                                                    anchors.leftMargin: 8
+                                                    anchors.rightMargin: 8
+                                                    spacing: 8
+
+                                                    // optional icon
+                                                    IconImage {
+                                                        visible: entry.icon !== ""
+                                                        width: 16
+                                                        height: 16
+                                                        anchors.verticalCenter: parent.verticalCenter
+                                                        source: entry.icon
+                                                    }
+
+                                                    Text {
+                                                        anchors.verticalCenter: parent.verticalCenter
+                                                        text: entry.text
+                                                        color: root.colorText
+                                                        font.pixelSize: root.fontSize - 2
+                                                        font.family: root.fontFamily
+                                                        elide: Text.ElideRight
+                                                        width: parent.width - 40
+                                                    }
+
+                                                    // submenu
+                                                    Text {
+                                                        anchors.verticalCenter: parent.verticalCenter
+                                                        text: entry.hasChildren ? "›" : ""
+                                                        color: root.colorOverlay
+                                                        font.pixelSize: root.fontSize - 2
+                                                        font.family: root.fontFamily
+                                                    }
+                                                }
+
+                                                MouseArea {
+                                                    id: hover
+                                                    anchors.fill: parent
+                                                    hoverEnabled: true
+                                                    enabled: entry.enabled && !entry.isSeparator
+
+                                                    onClicked: {
+                                                        if (entry.hasChildren) {
+                                                            panel.trayMenuStack.push(entry)
+                                                        } else {
+                                                            entry.triggered()
+                                                            panel.closeTrayMenu()
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        HyprlandFocusGrab {
+                            id: trayGrab
+                            windows: [ trayMenuWin ]
+                            active: false
+                            onCleared: panel.closeTrayMenu()
+                        }
+
                         Repeater {
                             id: trayRepeater
                             model: SystemTray.items
@@ -291,8 +465,9 @@ ShellRoot {
                                         if (mouse.button === Qt.LeftButton) {
                                             modelData.activate()
                                         } else if (mouse.button === Qt.RightButton) {
-                                            var pos = parent.mapToItem(panel.contentItem, 0, height)
-                                            modelData.display(panel, pos.x, pos.y)
+                                            if (!modelData.hasMenu) return
+                                            var pos = parent.mapToItem(panel.contentItem, 0, parent.height)
+                                            panel.openTrayMenu(modelData, pos.x, pos.y)
                                         }
                                     }
                                 }
