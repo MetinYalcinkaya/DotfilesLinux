@@ -94,7 +94,7 @@ Item {
 
                         MouseArea {
                             anchors.fill: parent
-                            onClicked: trayMenuStack.popMenu()
+                            onClicked: popMenu()
                         }
                     }
 
@@ -171,7 +171,7 @@ Item {
 
                                     onClicked: {
                                         if (entry.hasChildren) {
-                                            trayMenuStack.pushMenu(entry)
+                                            pushMenu(entry)
                                         } else {
                                             entry.triggered()
                                             closeTrayMenu()
