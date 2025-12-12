@@ -4,13 +4,12 @@
 
 ## Setup
 
-**OS:** Arch Linux
-
-**Shell:** zsh
-
-**Terminal:** Ghostty
-
-**Theme:** Catppuccin Mocha
+**OS**: Arch Linux
+**WM**: Hyprland
+**Shell**: zsh
+**Terminal**: Ghostty
+**Bar**: Quickshell
+**Theme**: Catppuccin Mocha
 
 ## Requirements
 
@@ -25,5 +24,3 @@
 2. Clone this repository (Preferably to ~/.dotfiles/)
    - Clone with `git clone --recurse-submodules git@github.com:MetinYalcinkaya/DotfilesLinux.git ~/.dotfiles`
 3. Run `make` in your terminal from the ~/.dotfiles/ directory
-
-## TODO
