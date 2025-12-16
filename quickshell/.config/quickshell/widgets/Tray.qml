@@ -87,7 +87,7 @@ Item {
         Text {
             anchors.centerIn: parent
             // TODO: change?
-            text: ""
+            text: "󰍜"
             color: theme.text
             font.pixelSize: theme.fontSize - 2
             font.family: theme.fontFamily
