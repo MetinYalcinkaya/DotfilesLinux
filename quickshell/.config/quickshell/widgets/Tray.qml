@@ -107,14 +107,16 @@ Item {
     PopupWindow {
         id: trayDrawerWin
         anchor.window: panel
-        anchor.rect.x: drawerX
-        anchor.rect.y: drawerY
+        anchor.rect.x: panel.width - width
+        anchor.rect.y: panel.height
         anchor.rect.w: 1
         anchor.rect.h: 1
         visible: false
         color: "transparent"
         implicitWidth: drawerBoxWidth
         implicitHeight: Math.max(1, drawerBox.height)
+
+        anchor.adjustment: PopupAdjustment.None
 
         ClippingRectangle {
             id: drawerBox
@@ -124,6 +126,7 @@ Item {
             radius: 10
             topLeftRadius: 0
             topRightRadius: 0
+            bottomRightRadius: 0
             color: theme.base
 
             opacity: trayOpen ? 1 : 0
