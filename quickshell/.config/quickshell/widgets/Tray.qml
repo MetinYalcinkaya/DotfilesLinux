@@ -68,7 +68,11 @@ Item {
         trayGrab.windows = [ panel, trayPopupWin ]
         trayGrab.active = true
         beginOverlay()
-        Qt.callLater(() => popupKeys.forceActiveFocus())
+        Qt.callLater(() => {
+            popupKeys.forceActiveFocus()
+            opening = false
+            trayPopupWin.anchor.updateAnchor()
+        })
     }
 
     function openTrayMenu(trayItem) {
@@ -81,7 +85,11 @@ Item {
         trayGrab.windows = [ panel, trayPopupWin ]
         trayGrab.active = true
         beginOverlay()
-        Qt.callLater(() => popupKeys.forceActiveFocus())
+        Qt.callLater(() => {
+            popupKeys.forceActiveFocus()
+            opening = false
+            trayPopupWin.anchor.updateAnchor()
+        })
     }
 
     function closeAll() {
@@ -94,6 +102,16 @@ Item {
         endOverlay()
     }
 
+    function backToDrawer() {
+        trayMenuStack = []
+        trayMenuRoot = null
+        overlayMode = "drawer"
+        opening = true
+        Qt.callLater(() => {
+            trayPopupWin.anchor.updateAnchor()
+            opening = false
+        })
+    }
 
     function pushMenu(entry) {
         trayMenuStack = trayMenuStack.concat([entry])
@@ -175,19 +193,24 @@ Item {
         anchor.rect.height: 1
         anchor.adjustment: PopupAdjustment.FlipY | PopupAdjustment.ResizeY
 
+        width: targetW
+        height: targetH
+
+        Behavior on width { NumberAnimation { duration: 180; easing.type: Easing.OutQuad } }
+        Behavior on height { NumberAnimation { duration: 180; easing.type: Easing.OutQuad } }
+
+        onWidthChanged: if (overlayOpen) anchor.updateAnchor()
+        onHeightChanged: if (overlayOpen) anchor.updateAnchor()
+
         anchor.onAnchoring: {
             const p = panel.contentItem.mapFromItem(trayButton, 0, trayButton.height)
             anchor.rect.y = p.y + 4
             anchor.rect.x = Math.max(0, panel.width - targetW)
         }
 
-        implicitWidth: targetW
-        implicitHeight: targetH
-
         ClippingRectangle {
             id: popupBox
-            width: targetW
-            height: targetH
+            anchors.fill: parent
 
             radius: 10
             topLeftRadius: 0
@@ -198,8 +221,6 @@ Item {
             opacity: overlayOpen ? 1 : 0
             scale: overlayOpen ? 1 : 0.98
 
-            Behavior on width { NumberAnimation { duration: 180; easing.type: Easing.OutQuad } }
-            Behavior on height { NumberAnimation { duration: 180; easing.type: Easing.OutQuad } }
             Behavior on opacity { NumberAnimation { duration: 140; easing.type: Easing.OutQuad } }
             Behavior on scale { NumberAnimation { duration: 180; easing.type: Easing.OutQuad } }
 
@@ -321,7 +342,7 @@ Item {
 
                         MouseArea {
                             anchors.fill: parent
-                            onClicked: overlayMode = "drawer"
+                            onClicked: backToDrawer()
                         }
                     }
 
