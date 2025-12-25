@@ -6,6 +6,7 @@ import Quickshell.Hyprland
 import Quickshell.Services.SystemTray
 
 Item {
+    id: trayRoot
     required property var panel
     required property var theme
 
@@ -20,11 +21,36 @@ Item {
     property int trayMenuX: 0
     property int trayMenuY: 0
 
+    readonly property bool overlayOpen: trayOpen || trayMenuWin.visible
+
+    Timer {
+        id: focusLossDebounce
+        interval: 0
+        repeat: false
+        onTriggered: {
+            if (overlayOpen && !(panelKeys.activeFocus || drawerKeys.activeFocus || menuKeys.activeFocus)) {
+                closeAll()
+            }
+        }
+    }
+
+    function scheduleFocusCheck() {
+        focusLossDebounce.restart()
+    }
+
     function syncDrawerAnchor() {
         const p = trayButton.mapToItem(panel.contentItem, 0, trayButton.height)
         drawerX = p.x + trayButton.width - drawerBoxWidth
         drawerY = panel.height - 1
         if (drawerX < 4) drawerX = 4
+    }
+
+    function beginOverlay() {
+        panel.focusable = true
+    }
+
+    function endOverlay() {
+        panel.focusable = false
     }
 
     function openDrawer() {
@@ -33,12 +59,15 @@ Item {
         trayDrawerWin.visible = true
         trayGrab.windows = [ panel, trayDrawerWin, trayMenuWin ]
         trayGrab.active = true
+        beginOverlay()
+        Qt.callLater(() => drawerKeys.forceActiveFocus())
     }
 
     function closeAll() {
         trayOpen = false
         closeTrayMenu()
         trayGrab.active = false
+        endOverlay()
     }
 
 
@@ -58,12 +87,15 @@ Item {
         trayMenuWin.visible = true
         trayGrab.windows = [ panel, trayDrawerWin, trayMenuWin ]
         trayGrab.active = true
+        beginOverlay()
+        Qt.callLater(() => menuKeys.forceActiveFocus())
     }
 
     function closeTrayMenu() {
         trayMenuWin.visible = false
         trayMenuStack = []
         trayMenuRoot = null
+        if (!trayOpen) endOverlay()
     }
 
     function pushMenu(entry) {
@@ -72,6 +104,24 @@ Item {
 
     function popMenu() {
         trayMenuStack = trayMenuStack.slice(0, -1)
+    }
+
+    FocusScope {
+        id: panelKeys
+        focus: overlayOpen
+
+        Keys.onEscapePressed: (event) => {
+            if (overlayOpen) {
+                closeAll()
+                event.accepted = true
+            }
+        }
+
+        onActiveFocusChanged: {
+            if (!activeFocus && overlayOpen) {
+                scheduleFocusCheck()
+            }
+        }
     }
 
     implicitWidth: trayButton.implicitWidth
@@ -138,6 +188,22 @@ Item {
 
             onHeightChanged: {
                 if (!trayOpen && height < 1) trayDrawerWin.visible = false
+            }
+
+            FocusScope {
+                id: drawerKeys
+                focus: trayDrawerWin.visible
+
+                Keys.onEscapePressed: (event) => {
+                    closeAll()
+                    event.accepted = true
+                }
+
+                onActiveFocusChanged: {
+                    if (!activeFocus && overlayOpen) {
+                        scheduleFocusCheck()
+                    }
+                }
             }
 
             Column {
@@ -210,8 +276,25 @@ Item {
 
             opacity: trayMenuWin.visible ? 1 : 0
             scale: trayMenuWin.visible ? 1 : 0.98
+
             Behavior on opacity { NumberAnimation { duration: 140; easing.type: Easing.OutQuad } }
             Behavior on scale { NumberAnimation { duration: 140; easing.type: Easing.OutQuad } }
+
+            FocusScope {
+                id: menuKeys
+                focus: trayMenuWin.visible
+
+                Keys.onEscapePressed: (event) => {
+                    closeAll()
+                    event.accepted = true
+                }
+
+                onActiveFocusChanged: {
+                    if (!activeFocus && overlayOpen) {
+                        scheduleFocusCheck()
+                    }
+                }
+            }
 
             Column {
                 id: menuCol
@@ -328,8 +411,7 @@ Item {
         active: false
         windows: [ panel, trayDrawerWin, trayMenuWin ]
         onCleared: {
-            trayOpen = false
-            closeTrayMenu()
+            closeAll()
         }
     }
 

@@ -22,6 +22,7 @@ RowLayout {
             property int wsId: workspace.id
             property bool isFocused: Hyprland.focusedWorkspace === workspace
 
+            // workspace numbers
             Text {
                 text: parent.wsId
                 color: parent.isFocused ? theme.teal : theme.overlay
@@ -31,6 +32,7 @@ RowLayout {
                 anchors.centerIn: parent
             }
 
+            // underline on focused
             Rectangle {
                 width: 20
                 height: 3
