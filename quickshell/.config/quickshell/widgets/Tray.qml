@@ -28,7 +28,7 @@ Item {
 
     Timer {
         id: hoverDismissTimer
-        interval: 10
+        interval: 150
         repeat: false
         onTriggered: {
             if (overlayOpen && !pointerInside) closeAll()
