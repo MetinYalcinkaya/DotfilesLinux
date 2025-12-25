@@ -13,6 +13,6 @@ QtObject {
     property color green: "#a6e3a1"
 
     // font
-    property string fontFamily: "Berkeley Mono"
+    property string fontFamily: "MonoLisa"
     property int fontSize: 18
 }
