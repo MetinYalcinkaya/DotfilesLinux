@@ -11,20 +11,16 @@ Item {
     required property var theme
 
     // drawer state
-    property bool trayOpen: false
-    property int drawerX: 0
-    property int drawerY: 0
+    property string overlayMode: "closed"
 
     // menu state
     property var trayMenuRoot: null
     property var trayMenuStack: []
-    property int trayMenuX: 0
-    property int trayMenuY: 0
 
-    readonly property bool overlayOpen: trayOpen || trayMenuWin.visible
-    readonly property bool pointerInside: hover.containsMouse
-                                        || drawerHover.hovered
-                                        || menuHover.hovered
+    readonly property bool overlayOpen: overlayMode !== "closed"
+    readonly property bool pointerInside: hover.containsMouse || popupHover.hovered
+
+    property bool opening: false
 
     Timer {
         id: hoverDismissTimer
@@ -46,7 +42,8 @@ Item {
         interval: 0
         repeat: false
         onTriggered: {
-            if (overlayOpen && !(panelKeys.activeFocus || drawerKeys.activeFocus || menuKeys.activeFocus)) {
+            if (opening) return
+            if (overlayOpen && !(panelKeys.activeFocus || popupKeys.activeFocus)) {
                 closeAll()
             }
         }
@@ -54,13 +51,6 @@ Item {
 
     function scheduleFocusCheck() {
         focusLossDebounce.restart()
-    }
-
-    function syncDrawerAnchor() {
-        const p = trayButton.mapToItem(panel.contentItem, 0, trayButton.height)
-        drawerX = p.x + trayButton.width - drawerBoxWidth
-        drawerY = panel.height - 1
-        if (drawerX < 4) drawerX = 4
     }
 
     function beginOverlay() {
@@ -72,49 +62,38 @@ Item {
     }
 
     function openDrawer() {
-        trayOpen = true
-        syncDrawerAnchor()
-        trayDrawerWin.visible = true
-        trayGrab.windows = [ panel, trayDrawerWin, trayMenuWin ]
+        opening = true
+        overlayMode = "drawer"
+        trayPopupWin.visible = true
+        trayGrab.windows = [ panel, trayPopupWin ]
         trayGrab.active = true
         beginOverlay()
-        Qt.callLater(() => drawerKeys.forceActiveFocus())
+        Qt.callLater(() => popupKeys.forceActiveFocus())
+    }
+
+    function openTrayMenu(trayItem) {
+        if (!trayItem || !trayItem.hasMenu) return
+        opening = true
+        trayMenuRoot = trayItem.menu
+        trayMenuStack = []
+        overlayMode = "menu"
+        trayPopupWin.visible = true
+        trayGrab.windows = [ panel, trayPopupWin ]
+        trayGrab.active = true
+        beginOverlay()
+        Qt.callLater(() => popupKeys.forceActiveFocus())
     }
 
     function closeAll() {
-        trayOpen = false
-        closeTrayMenu()
+        opening = false
+        trayPopupWin.visible = false
         trayGrab.active = false
+        overlayMode = "closed"
+        trayMenuStack = []
+        trayMenuRoot = null
         endOverlay()
     }
 
-
-    function toggleDrawer() {
-        if (trayOpen) {
-            closeAll()
-        } else {
-            openDrawer()
-        }
-    }
-
-    function openTrayMenu(trayItem, x, y) {
-        trayMenuRoot = trayItem.menu
-        trayMenuStack = []
-        trayMenuX = x
-        trayMenuY = y
-        trayMenuWin.visible = true
-        trayGrab.windows = [ panel, trayDrawerWin, trayMenuWin ]
-        trayGrab.active = true
-        beginOverlay()
-        Qt.callLater(() => menuKeys.forceActiveFocus())
-    }
-
-    function closeTrayMenu() {
-        trayMenuWin.visible = false
-        trayMenuStack = []
-        trayMenuRoot = null
-        if (!trayOpen) endOverlay()
-    }
 
     function pushMenu(entry) {
         trayMenuStack = trayMenuStack.concat([entry])
@@ -166,30 +145,49 @@ Item {
             anchors.fill: parent
             hoverEnabled: true
             acceptedButtons: Qt.LeftButton
-            onClicked: toggleDrawer()
+            onClicked: {
+                if (overlayMode === "drawer") closeAll()
+                else openDrawer()
+            }
         }
     }
 
+    // sizing targets
     readonly property int drawerBoxWidth: Math.max(1, Math.min(340, drawerRow.implicitWidth + 16))
+    readonly property int drawerBoxHeight: Math.max(1, drawerCol.implicitHeight)
 
+    readonly property int menuBoxWidth: Math.max(260, menuCol.implicitWidth)
+    readonly property int menuBoxHeight: Math.max(1, menuCol.implicitHeight + 32)
+
+    readonly property int targetW: overlayMode === "drawer" ? drawerBoxWidth
+                            : overlayMode === "menu"   ? menuBoxWidth
+                            : 1
+    readonly property int targetH: overlayMode === "drawer" ? drawerBoxHeight
+                            : overlayMode === "menu"   ? menuBoxHeight
+                            : 1
     PopupWindow {
-        id: trayDrawerWin
-        anchor.window: panel
-        anchor.rect.x: panel.width - width
-        anchor.rect.y: panel.height
-        anchor.rect.w: 1
-        anchor.rect.h: 1
+        id: trayPopupWin
         visible: false
         color: "transparent"
-        implicitWidth: drawerBoxWidth
-        implicitHeight: Math.max(1, drawerBox.height)
 
-        anchor.adjustment: PopupAdjustment.None
+        anchor.window: panel
+        anchor.rect.width: 1
+        anchor.rect.height: 1
+        anchor.adjustment: PopupAdjustment.FlipY | PopupAdjustment.ResizeY
+
+        anchor.onAnchoring: {
+            const p = panel.contentItem.mapFromItem(trayButton, 0, trayButton.height)
+            anchor.rect.y = p.y + 4
+            anchor.rect.x = Math.max(0, panel.width - targetW)
+        }
+
+        implicitWidth: targetW
+        implicitHeight: targetH
 
         ClippingRectangle {
-            id: drawerBox
-            width: trayDrawerWin.implicitWidth
-            height: trayOpen ? (drawerCol.implicitHeight) : 0
+            id: popupBox
+            width: targetW
+            height: targetH
 
             radius: 10
             topLeftRadius: 0
@@ -197,22 +195,19 @@ Item {
             bottomRightRadius: 0
             color: theme.base
 
-            opacity: trayOpen ? 1 : 0
-            scale: trayOpen ? 1 : 0.98
-            
+            opacity: overlayOpen ? 1 : 0
+            scale: overlayOpen ? 1 : 0.98
+
+            Behavior on width { NumberAnimation { duration: 180; easing.type: Easing.OutQuad } }
             Behavior on height { NumberAnimation { duration: 180; easing.type: Easing.OutQuad } }
             Behavior on opacity { NumberAnimation { duration: 140; easing.type: Easing.OutQuad } }
             Behavior on scale { NumberAnimation { duration: 180; easing.type: Easing.OutQuad } }
 
-            onHeightChanged: {
-                if (!trayOpen && height < 1) trayDrawerWin.visible = false
-            }
-
-            HoverHandler { id: drawerHover }
+            HoverHandler { id: popupHover }
 
             FocusScope {
-                id: drawerKeys
-                focus: trayDrawerWin.visible
+                id: popupKeys
+                focus: trayPopupWin.visible
 
                 Keys.onEscapePressed: (event) => {
                     closeAll()
@@ -220,49 +215,54 @@ Item {
                 }
 
                 onActiveFocusChanged: {
-                    if (!activeFocus && overlayOpen) {
-                        scheduleFocusCheck()
-                    }
+                    if (!activeFocus && overlayOpen) scheduleFocusCheck()
                 }
             }
 
-            Column {
-                id: drawerCol
-                padding: 8
-                spacing: 6
+            // drawer view icons
+            Item {
+                id: drawerView
+                anchors.fill: parent
+                visible: overlayMode === "drawer"
 
-                RowLayout {
-                    id: drawerRow
-                    spacing: 4
+                Column {
+                    id: drawerCol
+                    anchors.fill: parent
+                    padding: 8
+                    spacing: 6
 
-                    Repeater {
-                        model: SystemTray.items
-                        delegate: Rectangle {
-                            Layout.preferredWidth: 24
-                            Layout.preferredHeight: 24
-                            radius: 6
-                            color: iconHover.containsMouse ? Qt.rgba(1,1,1,0.06) : "transparent"
+                    RowLayout {
+                        id: drawerRow
+                        spacing: 4
 
-                            IconImage {
-                                anchors.centerIn: parent
-                                width: 16
-                                height: 16
-                                source: modelData.icon
-                            }
+                        Repeater {
+                            model: SystemTray.items
+                            delegate: Rectangle {
+                                Layout.preferredWidth: 24
+                                Layout.preferredHeight: 24
+                                radius: 6
+                                color: iconHover.containsMouse ? Qt.rgba(1,1,1,0.06) : "transparent"
 
-                            MouseArea {
-                                id: iconHover
-                                anchors.fill: parent
-                                hoverEnabled: true
-                                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                                IconImage {
+                                    anchors.centerIn: parent
+                                    width: 16
+                                    height: 16
+                                    source: modelData.icon
+                                }
 
-                                onClicked: (mouse) => {
-                                    if (mouse.button === Qt.LeftButton) {
-                                        modelData.activate()
-                                    } else if (mouse.button === Qt.RightButton) {
-                                        if (!modelData.hasMenu) return
-                                        const pos = parent.mapToItem(panel.contentItem, 0, trayButton.height + 8)
-                                        openTrayMenu(modelData, pos.x, panel.height - 1)
+                                MouseArea {
+                                    id: iconHover
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+
+                                    onClicked: (mouse) => {
+                                        if (mouse.button === Qt.LeftButton) {
+                                            modelData.activate()
+                                            closeAll()
+                                        } else if (mouse.button === Qt.RightButton) {
+                                            openTrayMenu(modelData)
+                                        }
                                     }
                                 }
                             }
@@ -270,154 +270,139 @@ Item {
                     }
                 }
             }
-        }
-    }
 
-    PopupWindow {
-        id: trayMenuWin
-        anchor.window: panel
-        anchor.rect.x: trayMenuX
-        anchor.rect.y: trayMenuY
-        anchor.rect.w: 1
-        anchor.rect.h: 1
-        visible: false
-        color: "transparent"
-        implicitWidth: menuBox.implicitWidth
-        implicitHeight: menuBox.implicitHeight
+            // menu view
+            Item {
+                id: menuView
+                anchors.fill: parent
+                visible: overlayMode === "menu"
 
-        Rectangle {
-            id: menuBox
-            implicitWidth: 260
-            implicitHeight: menuCol.implicitHeight
-            radius: 10
-            color: theme.base
-            border.color: theme.overlay
-            border.width: 1
+                ColumnLayout {
+                    id: menuCol
+                    anchors.fill: parent
+                    anchors.margins: 8
+                    spacing: 2
 
-            opacity: trayMenuWin.visible ? 1 : 0
-            scale: trayMenuWin.visible ? 1 : 0.98
+                    Rectangle {
+                        Layout.fillWidth: true
+                        implicitHeight: trayMenuStack.length > 0 ? 28 : 0
+                        visible: trayMenuStack.length > 0
+                        radius: 6
+                        color: "transparent"
 
-            Behavior on opacity { NumberAnimation { duration: 140; easing.type: Easing.OutQuad } }
-            Behavior on scale { NumberAnimation { duration: 140; easing.type: Easing.OutQuad } }
-
-            HoverHandler { id: menuHover }
-
-            FocusScope {
-                id: menuKeys
-                focus: trayMenuWin.visible
-
-                Keys.onEscapePressed: (event) => {
-                    closeAll()
-                    event.accepted = true
-                }
-
-                onActiveFocusChanged: {
-                    if (!activeFocus && overlayOpen) {
-                        scheduleFocusCheck()
-                    }
-                }
-            }
-
-            Column {
-                id: menuCol
-                padding: 8
-                spacing: 2
-
-                Rectangle {
-                    visible: trayMenuStack.length > 0
-                    height: visible ? 28 : 0
-                    width: parent.width
-                    radius: 6
-                    color: "transparent"
-
-                    Text {
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "<- Back"
-                        color: theme.text
-                        font.pixelSize: theme.fontSize - 2
-                        font.family: theme.fontFamily
-                    }
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: popMenu()
-                    }
-                }
-
-                QsMenuOpener {
-                    id: trayMenuOpener
-                    menu: trayMenuStack.length > 0
-                        ? trayMenuStack[trayMenuStack.length - 1]
-                        : trayMenuRoot
-                }
-
-                Repeater {
-                    model: trayMenuOpener.children
-                    delegate: Item {
-                        width: menuBox.width - 16
-                        height: entry.isSeparator ? 10 : 28
-                        property var entry: modelData
-
-                        Rectangle {
-                            visible: entry.isSeparator
+                        Text {
                             anchors.verticalCenter: parent.verticalCenter
-                            width: parent.width
-                            height: 1
-                            color: theme.overlay
-                            opacity: 0.6
+                            text: "<- Back"
+                            color: theme.text
+                            font.pixelSize: theme.fontSize - 2
+                            font.family: theme.fontFamily
                         }
 
-                        Rectangle {
-                            visible: !entry.isSeparator
+                        MouseArea {
                             anchors.fill: parent
+                            onClicked: popMenu()
+                        }
+                    }
+
+                    Rectangle {
+                        Layout.fillWidth: true
+                        implicitHeight: trayMenuStack.length === 0 ? 28 : 0
+                        visible: trayMenuStack.length === 0
+                        radius: 6
+                        color: "transparent"
+
+                        Text {
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: "<- Tray"
+                            color: theme.text
+                            font.pixelSize: theme.fontSize - 2
+                            font.family: theme.fontFamily
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: overlayMode = "drawer"
+                        }
+                    }
+
+                    QsMenuOpener {
+                        id: trayMenuOpener
+                        menu: trayMenuStack.length > 0
+                              ? trayMenuStack[trayMenuStack.length - 1]
+                              : trayMenuRoot
+                    }
+
+                    Repeater {
+                        model: trayMenuOpener.children
+                        delegate: Rectangle {
+                            Layout.fillWidth: true
+                            implicitHeight: modelData.isSeparator ? 10 : 28
                             radius: 6
-                            color: hover.containsMouse ? Qt.rgba(1,1,1,0.06) : "transparent"
-                            opacity: entry.enabled ? 1 : 0.45
+                            color: "transparent"
+                            opacity: modelData.enabled ? 1 : 0.45
+                            property var entry: modelData
 
-                            Row {
-                                anchors.fill: parent
-                                anchors.leftMargin: 8
-                                anchors.rightMargin: 8
-                                spacing: 8
-
-                                IconImage {
-                                    visible: entry.icon !== ""
-                                    width: 16
-                                    height: 16
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    source: entry.icon
-                                }
-
-                                Text {
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    text: entry.text
-                                    color: theme.text
-                                    font.pixelSize: theme.fontSize - 2
-                                    font.family: theme.fontFamily
-                                    elide: Text.ElideRight
-                                    width: parent.width - 40
-                                }
-
-                                Text {
-                                    anchors.verticalCenter: parent.verticalCenter
-                                    text: entry.hasChildren ? "›" : ""
-                                    color: theme.overlay
-                                    font.pixelSize: theme.fontSize - 2
-                                    font.family: theme.fontFamily
-                                }
+                            Rectangle {
+                                visible: entry.isSeparator
+                                anchors.verticalCenter: parent.verticalCenter
+                                width: parent.width
+                                height: 1
+                                color: theme.overlay
+                                opacity: 0.6
                             }
 
-                            MouseArea {
-                                id: hover
+                            Rectangle {
+                                visible: !entry.isSeparator
                                 anchors.fill: parent
-                                hoverEnabled: true
-                                enabled: entry.enabled && !entry.isSeparator
-                                onClicked: {
-                                    if (entry.hasChildren) {
-                                        pushMenu(entry)
-                                    } else {
-                                        entry.triggered()
-                                        closeTrayMenu()
+                                radius: 6
+                                color: hoverEntry.containsMouse ? Qt.rgba(1,1,1,0.06) : "transparent"
+                                opacity: entry.enabled ? 1 : 0.45
+
+                                Row {
+                                    anchors.fill: parent
+                                    anchors.leftMargin: 8
+                                    anchors.rightMargin: 8
+                                    spacing: 8
+
+                                    IconImage {
+                                        visible: entry.icon !== ""
+                                        width: 16
+                                        height: 16
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        source: entry.icon
+                                    }
+
+                                    Text {
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        text: entry.text
+                                        color: theme.text
+                                        font.pixelSize: theme.fontSize - 2
+                                        font.family: theme.fontFamily
+                                        elide: Text.ElideRight
+                                        width: parent.width - 40
+                                    }
+
+                                    Text {
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        text: entry.hasChildren ? "›" : ""
+                                        color: theme.overlay
+                                        font.pixelSize: theme.fontSize - 2
+                                        font.family: theme.fontFamily
+                                    }
+                                }
+
+                                MouseArea {
+                                    id: hoverEntry
+                                    anchors.fill: parent
+                                    hoverEnabled: true
+                                    enabled: entry.enabled && !entry.isSeparator
+                                    onClicked: {
+                                        if (entry.hasChildren) {
+                                            pushMenu(entry)
+                                        } else {
+                                            entry.triggered()
+                                            closeAll()
+                                        }
                                     }
                                 }
                             }
@@ -431,11 +416,9 @@ Item {
     HyprlandFocusGrab {
         id: trayGrab
         active: false
-        windows: [ panel, trayDrawerWin, trayMenuWin ]
+        windows: [ panel, trayPopupWin ]
         onCleared: {
             closeAll()
         }
     }
-
-    onTrayOpenChanged: if (trayOpen) syncDrawerAnchor()
 }
