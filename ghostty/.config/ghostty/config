@@ -8,13 +8,13 @@ theme = Catppuccin Mocha
 # command = tmux attach-session || tmux
 
 # Font
-# font-family = "MonoLisa Variable"
 # font-family = "MonoLisa"
-font-family = "Berkeley Mono"
+# font-family = "Berkeley Mono"
+font-family = "MonoLisa Variable"
+font-family = "Symbols Nerd Font Mono"
 
-font-size = 17
+font-size = 15.5
 font-synthetic-style = false
-
 # Berkeley Build
 # Ticket: 0J2NJW0X
 # Dot Zero 0
@@ -72,11 +72,11 @@ adjust-underline-thickness = 1
 adjust-underline-position = 1
 
 # Remap glyphs and powerline symbols
-font-codepoint-map = U+e000-U+e00a,U+ea60-U+ebeb,U+e0a0-U+e0c8,U+e0ca,U+e0cc-U+e0d4,U+e200-U+e2a9,U+e300-U+e3e3,U+e5fa-U+e6b1,U+e700-U+e7c5,U+f000-U+f2e0,U+f300-U+f372,U+f400-U+f532,U+f0001-U+f1af0=Symbols Nerd Font Mono
+# font-codepoint-map = U+e000-U+e00a,U+ea60-U+ebeb,U+e0a0-U+e0c8,U+e0ca,U+e0cc-U+e0d4,U+e200-U+e2a9,U+e300-U+e3e3,U+e5fa-U+e6b1,U+e700-U+e7c5,U+f000-U+f2e0,U+f300-U+f372,U+f400-U+f532,U+f0001-U+f1af0=Symbols Nerd Font Mono
 # HACK:
 # Not sure why setting this to powerline symbols breaks it?
 # It also breaks if I completely comment it out 💀
-font-codepoint-map = U+E0A0-U+E0A3,U+E0C0-U+E0C7,U+E0B0-U+E0B3=
+# font-codepoint-map = U+E0A0-U+E0A3,U+E0C0-U+E0C7,U+E0B0-U+E0B3=
 
 # Cursor
 cursor-style = block
