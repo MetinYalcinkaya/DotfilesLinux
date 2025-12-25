@@ -22,6 +22,24 @@ Item {
     property int trayMenuY: 0
 
     readonly property bool overlayOpen: trayOpen || trayMenuWin.visible
+    readonly property bool pointerInside: hover.containsMouse
+                                        || drawerHover.hovered
+                                        || menuHover.hovered
+
+    Timer {
+        id: hoverDismissTimer
+        interval: 10
+        repeat: false
+        onTriggered: {
+            if (overlayOpen && !pointerInside) closeAll()
+        }
+    }
+
+    onPointerInsideChanged: {
+        if (!overlayOpen) return
+        if (pointerInside) hoverDismissTimer.stop()
+        else hoverDismissTimer.restart()
+    }
 
     Timer {
         id: focusLossDebounce
@@ -190,6 +208,8 @@ Item {
                 if (!trayOpen && height < 1) trayDrawerWin.visible = false
             }
 
+            HoverHandler { id: drawerHover }
+
             FocusScope {
                 id: drawerKeys
                 focus: trayDrawerWin.visible
@@ -279,6 +299,8 @@ Item {
 
             Behavior on opacity { NumberAnimation { duration: 140; easing.type: Easing.OutQuad } }
             Behavior on scale { NumberAnimation { duration: 140; easing.type: Easing.OutQuad } }
+
+            HoverHandler { id: menuHover }
 
             FocusScope {
                 id: menuKeys
