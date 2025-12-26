@@ -5,10 +5,15 @@
 ## Setup
 
 **OS**: Arch Linux
+
 **WM**: Hyprland
+
 **Shell**: zsh
+
 **Terminal**: Ghostty
+
 **Bar**: Quickshell
+
 **Theme**: Catppuccin Mocha
 
 ## Requirements
