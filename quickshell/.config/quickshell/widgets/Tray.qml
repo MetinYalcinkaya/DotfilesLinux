@@ -345,7 +345,8 @@ Item {
 
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "󰌑"
+                        // text: "<- Back"
+                        text: "󰌑 Back"
                         color: theme.text
                         font.pixelSize: theme.fontSize - 2
                         font.family: theme.fontFamily
@@ -363,7 +364,8 @@ Item {
 
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: "󰌑"
+                        // text: "<- Tray"
+                        text: "󰌑 Tray"
                         color: theme.text
                         font.pixelSize: theme.fontSize - 2
                         font.family: theme.fontFamily
