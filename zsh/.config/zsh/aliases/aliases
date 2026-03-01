@@ -9,6 +9,7 @@ alias uni="cd $HOME/Uni/"
 alias unimnt="cd /mnt/uni/"
 alias kuni="sudo killall openvpn && sudo killall sshfs"
 alias vim="nvim"
+alias gvim="nvim --listen /tmp/godot-nvim.pipe"
 # Obsidian review
 alias or="nvim $HOME/Documents/Obsidian/Main/inbox/*.md"
 alias pmorphan="pacman -Qdtq"
