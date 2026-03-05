@@ -3,24 +3,30 @@ If:
 CompileFlags:
   Add:
     - -std=c17
-    - -pedantic-errors
     - -Wall
     - -Wextra
-    - -Wconversion
-    - -Wsign-conversion
     - -Werror
-    - -Wshadow
+    - -pedantic
+    - -g
+    - -O0
+    - -fsanitize=address,undefined
+    - -fno-omit-frame-pointer
 ---
 If:
   PathMatch: .*\.(cpp|cc|cxx|h|hpp)
 CompileFlags:
   Add:
     - -std=c++23
-    - -pedantic-errors
     - -Wall
-    - -Weffc++
     - -Wextra
+    - -Wpedantic
+    - -Wshadow
     - -Wconversion
     - -Wsign-conversion
-    - -Werror
-    - -Wshadow
+    - -Wnull-dereference
+    - -Wdouble-promotion
+    - -Werror=return-type
+    - -g
+    - -fsanitize=address,undefined
+    - -fno-omit-frame-pointer
+    - -O1
