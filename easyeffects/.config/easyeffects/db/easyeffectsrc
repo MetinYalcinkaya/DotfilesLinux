@@ -18,8 +18,8 @@ visiblePage=pluginsPage
 visiblePlugin=equalizer#0
 
 [Window]
-height=700
+height=790
 lastLoadedInputPreset=NR
 lastLoadedOutputPreset=Focal Clear
 visiblePage=inputPage
-width=1276
+width=1436
