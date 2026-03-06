@@ -1,5 +1,5 @@
 If:
-  PathMatch: .*\.c
+  PathMatch: .*\.(c|h)
 CompileFlags:
   Add:
     - -std=c17
@@ -13,7 +13,7 @@ CompileFlags:
     - -fno-omit-frame-pointer
 ---
 If:
-  PathMatch: .*\.(cpp|cc|cxx|h|hpp)
+  PathMatch: .*\.(cpp|cc|cxx|hpp)
 CompileFlags:
   Add:
     - -std=c++23
